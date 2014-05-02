@@ -1,0 +1,47 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Course
+
+@{
+  ViewBag.Title = "Courses";
+  Layout = "../Shared/_Index.cshtml";
+}
+
+<thead>
+  <tr>
+    <th></th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Duration</th>
+    <th>Price</th>
+    <th>Status</th>
+  </tr>
+</thead>
+<tbody>
+  @{
+    List<Course> courses = ViewBag.Courses;
+    if (courses != null && courses.Any())
+    {
+      foreach (Course course in ViewBag.Courses)
+      {
+        <tr>
+          <td style="text-align: center"><input type="checkbox" data="@course.Id" /></td>
+          <td class="td" style="cursor: pointer;" onclick="location.href = '@Url.Action("Details", @ViewBag.ControllerName, new {id = course.Id})'">@course.Title</td>
+          <td>
+            @course.Description
+          </td>
+          <td>
+            @course.Duration.ConvertToString("day")
+          </td>
+          <td class="text-right">
+            <span><i class="fa fa-usd"></i></span>
+            @course.Price.ToCurrencyString()
+          </td>
+          <td>
+            @course.Status
+          </td>
+        </tr>
+      }
+    }
+  }
+</tbody>

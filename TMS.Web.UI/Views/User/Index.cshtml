@@ -1,0 +1,45 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model User
+
+@{
+  ViewBag.Title = "Users";
+  Layout = "../Shared/_Index.cshtml";
+}
+<thead>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>User Name</th>
+    <th>Role</th>
+    <th>Expiration Date</th>
+    <th>Status</th>
+  </tr>
+</thead>
+<tbody>
+  @{
+    List<User> users = ViewBag.Users;
+    if (users != null && users.Any())
+    {
+      foreach (User user in users)
+      {
+        <tr>
+          <td><input type="checkbox" data="@user.Id" /></td>
+          <td style="cursor: pointer;" onclick="location.href = '@Url.Action("Details", "User" , new {id=user.Id})'"></td>
+          <td>
+            @user.UserName
+          </td>
+          <td>
+            @Html.PascalCaseToPrettyString(user.Role)
+          </td>
+          <td>
+            @user.ExpiraryDate.FormatDateTime()
+          </td>
+          <td>
+            @user.Status
+          </td>
+        </tr>
+      }
+    }
+  }
+</tbody>

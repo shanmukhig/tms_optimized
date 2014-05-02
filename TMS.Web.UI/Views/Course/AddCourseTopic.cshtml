@@ -1,0 +1,40 @@
+﻿@{
+  Layout = string.Empty;
+}
+@using (Html.BeginForm("AddCourseTopic", "Course", FormMethod.Get, new {@id = "addCourseForm"}))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-book fa-lg fa-fw"></i><strong>Course</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td class="col-md-3 text-right vert-align" style="border-top: none;"><input type="hidden" id="cid" value="@ViewBag.Cid"><strong>Title:</strong></td>
+        <td class="col-md-9" style="border-top: none;">
+          <div class='input-group date'>
+            <span class="input-group-addon"><i class="fa fa-book fa-lg"></i></span>
+            <input type="text" class="form-control" id="addCourseTitle"/>
+          </div>
+        </td>
+      </tr>
+      @if (@ViewBag.Time == "minutes")
+      {
+        <tr>
+          <td class="col-md-3 text-right vert-align"><strong>Duration:</strong></td>
+          <td class="col-md-9">
+            <div class='input-group date'>
+              <span class="input-group-addon"><i class="fa fa-clock-o fa-lg"></i></span>
+              <input type="text" class="form-control text-right" id="addCourseDuration" />
+              <span class="input-group-addon">@ViewBag.Time</span>
+            </div>
+          </td>
+        </tr>
+      }
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="AddCourseTopic"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<script src="@Url.Content("~/Scripts/AddCourseTopicValidations.js")"></script>

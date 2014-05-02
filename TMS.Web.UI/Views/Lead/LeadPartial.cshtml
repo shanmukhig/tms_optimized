@@ -1,0 +1,253 @@
+﻿@using System.Linq
+@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Lead
+
+@{
+  Layout = "../Shared/_CreateEditPartial.cshtml";
+}
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-text list-group-item-info">
+    <i class="fa fa-tags fa-fw fa-lg"></i>
+    <strong>Personal Details</strong><i class="fa fa-chevron-down pull-right"></i>
+  </li>
+  <li class="list-group-item">
+    <table class="table">
+      <tr>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;">@Html.HiddenFor(lead => lead.Id)@Html.LabelForPascal(lead => lead.Salutation):</td>
+        <td class="col-md-4" style="border-top: none;">@Html.EnumDropDownListFor(lead => lead.Salutation)</td>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;">@Html.LabelForPascal(lead => lead.FirstName):</td>
+        <td class="col-md-4" style="border-top: none;">@Html.TextBoxFor(lead => lead.FirstName, new { @class = "form-control" })</td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.LastName):</td>
+        <td class="col-md-4">@Html.TextBoxFor(lead => lead.LastName, new { @class = "form-control" })</td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.LeadType):</td>
+        <td class="col-md-4">@Html.EnumDropDownListFor(lead => lead.LeadType)</td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.LeadSource):</td>
+        <td class="col-md-4">@Html.EnumDropDownListFor(lead => lead.LeadSource)</td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.City):</td>
+        <td class="col-md-4">@Html.TextBoxFor(lead => lead.City, new { @class = "form-control" })</td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.Country):</td>
+        <td class="col-md-4">
+          @{
+  List<Country> countries = ViewBag.Countries;
+  var selectListItem = countries.Select(c => new SelectListItem
+  {
+    Selected = c.Code.Equals(@Model.Country, StringComparison.InvariantCultureIgnoreCase),
+    Text = c.Name,
+    Value = c.Id
+  });
+          }
+          @Html.DropDownListFor(lead => lead.Country, selectListItem, "Select One...", new { @class = "form-control" })
+        </td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.ReferredBy):</td>
+        <td class="col-md-4">
+          @*@{
+  List<User> users = ViewBag.Users;
+  selectListItem = from u in users
+                   select new SelectListItem
+                   {
+                     Selected = @Model.ReferredBy == u.Id,
+                     Text = u.Name,
+                     Value = u.Id
+                   };
+          }
+          @Html.DropDownListFor(lead => lead.ReferredBy, selectListItem, "Select One...", new { @class = "form-control" })*@
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-2 vert-align text-right">@Html.LabelForPascal(lead => lead.ClientStatus):</td>
+        <td class="col-md-4">@Html.EnumDropDownListFor(lead => lead.ClientStatus)</td>
+        <td class="col-md-2 vert-align text-right">@Html.LabelForPascal(lead => lead.AssignedTo):</td>
+        <td class="col-md-4">
+          @*@{
+  if (!string.IsNullOrWhiteSpace(Model.ReferredBy))
+  {
+    SelectListItem listItem = selectListItem.Single(x => x.Value == @Model.ReferredBy);
+    listItem.Selected = true;
+  }
+          }@Html.DropDownListFor(lead => lead.ReferredBy, selectListItem, "Select One...", new { @class = "form-control" })*@
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-2 vert-align text-right">@Html.LabelForPascal(lead => lead.ExpectedDateOfJoin):</td>
+        <td class="col-md-4">
+          <div class='input-group date' id="expectedDateOfJoin">
+            @Html.TextBoxFor(lead => lead.ExpectedDateOfJoin, "{0:dddd MMMM, dd yyyy}", new { @class = "form-control datetimepicker", @readonly = true })
+            <span class="input-group-addon btn-outline btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </td>
+        <td class="col-md-2 vert-align text-right">@Html.LabelForPascal(lead => lead.DemoDateTime):</td>
+        <td class="col-md-4">
+          <div class='input-group date' id="demoDateTime">
+            @Html.TextBoxFor(lead => lead.DemoDateTime, "{0:dddd MMMM, dd yyyy HH:mm}", new { @class = "form-control datetimepicker", @readonly = true })
+            <span class="input-group-addon btn-outline btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </li>
+</ul>
+<div class="row">
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-text list-group-item-info"><i class="fa fa-phone fa-fw fa-lg"></i>@Html.LabelForPascal(lead => lead.CommunicationDetails)<i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table" id="communicationDetail">
+          <tbody>
+            <tr>
+              <td colspan="4" style="border-top:none;"><span class="btn btn-primary btn-xs btn-primary btn-outline pull-right" data-toggle="modal" data-uri="@Url.Action("Index", "CommunicationDetail")" data-style="zoom-out"><i class="glyphicon glyphicon-plus"></i></span></td>
+            </tr>
+            <tr>
+              <td class="col-md-2"><span class="pull-right"><strong>Is Preferred?</strong></span></td>
+              <td class="col-md-2"><strong>Comm. Type</strong></td>
+              <td class="col-md-6"><strong>ID</strong></td>
+              <td class="col-md-2"></td>
+            </tr>
+            @if (Model.CommunicationDetails != null && Model.CommunicationDetails.Any())
+                    {
+                      foreach (CommunicationDetail communicationDetail in Model.CommunicationDetails)
+                      {
+                    <tr>
+                      <td>
+                        @if (communicationDetail.IsPreferred)
+                            {
+                            <span class="pull-right"><i class="fa fa-check-square fa-lg"></i></span>
+                            }
+                            else
+                            {
+                            <span class="pull-right"><i class="fa fa-square-o fa-lg"></i></span>
+                            }
+                      </td>
+                      <td>
+                        @switch (communicationDetail.CommunicationType)
+                            {
+                              case CommunicationType.Email:
+                            <i class="fa fa-envelope fa-lg"></i>
+                                break;
+                              case CommunicationType.Phone:
+                            <i class="fa fa-phone-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Mobile:
+                            <i class="fa fa-mobile fa-lg"></i>
+                                break;
+                              case CommunicationType.Skype:
+                            <i class="fa fa-skype fa-lg"></i>
+                                break;
+                              case CommunicationType.Twitter:
+                            <i class="fa fa-twitter-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Facebook:
+                            <i class="fa fa-facebook-square fa-lg"></i>
+                                break;
+                              case CommunicationType.LinkedIn:
+                            <i class="fa fa-linkedin-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Fax:
+                            <i id="brandicon" class="fa fa-print fa-lg"></i>
+                                break;
+                              default:
+                            <i class="fa fa-question fa-lg"></i>
+                                break;
+                            }
+                      </td>
+                      <td>@communicationDetail.Uri</td>
+                      <td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td>
+                    </tr>
+                      }
+                    }
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-text list-group-item-info"><i class="fa fa-clock-o fa-fw fa-lg"></i>@Html.LabelForPascal(lead => lead.BestTimeToContact)<i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table" id="bestTimetoContact">
+          <tbody>
+            <tr>
+              <td colspan="2" style="border-top: none;"><span class="btn btn-primary btn-xs btn-primary btn-outline pull-right" data-toggle="modal" data-uri="@Url.Action("Index", "BestTimeToContact")" data-style="zoom-out"><i class="glyphicon glyphicon-plus"></i></span></td>
+            </tr>
+            @if (Model.BestTimeToContact != null && Model.BestTimeToContact.Any())
+                    {
+                      foreach (DateTime? dateTime in Model.BestTimeToContact)
+                      {
+                    <tr>
+                      <td><i class="fa fa-clock-o fa-lg fa-fw"></i>@dateTime.FormatDateTime()</td>
+                      <td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td>
+                    </tr>
+                      }
+                    }
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-text list-group-item-info"><i class="fa fa-book fa-fw fa-lg"></i><strong>Course Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table" id="courseRequired">
+          <tbody>
+            <tr><td colspan="4" style="border-top: none;"><span class="btn btn-primary btn-xs btn-primary btn-outline pull-right" data-toggle="modal" data-uri="@Url.Action("Index", "CourseRequested")" data-style="zoom-out"><i class="glyphicon glyphicon-plus"></i></span></td></tr>
+            <tr>
+              <td class="col-md-6">
+                <strong>Title</strong>
+              </td>
+              <td class="col-md-3">
+                <strong>Service Required</strong>
+              </td>
+              <td class="col-md-3"><span class="pull-right"><strong>Amount Quoted</strong></span></td>
+              <td></td>
+            </tr>
+            @if (Model.Courses != null && Model.Courses.Any())
+                    {
+                      var courses = ViewBag.Courses as List<Course>;
+                      foreach (CourseRequested courseRequested in Model.Courses)
+                      {
+                    <tr>
+                      <td><input type="hidden" value="@courseRequested.CourseId,@courseRequested.ServiceRequired,@courseRequested.AmountQuoted" />@courses.Single(x => x.Id == courseRequested.CourseId).Title</td>
+                      <td>@Html.PascalCaseToPrettyString(courseRequested.ServiceRequired)</td>
+                      <td class="text-right"><i class="fa fa-usd fa-fw"></i>@courseRequested.AmountQuoted.ToCurrencyString()</td>
+                      <td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td>
+                    </tr>
+                      }
+                    }
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-text list-group-item-info">
+        <i class="fa fa-ellipsis-h fa-fw fa-lg"></i>
+        <strong>Misc.</strong><i class="fa fa-chevron-down pull-right"></i>
+      </li>
+      <li class="list-group-item">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td class="col-md-4 vert-align text-right" style="border-top: none;">@Html.LabelFor(lead => lead.Description):</td>
+              <td class="col-md-8" style="border-top: none;">@Html.TextBoxFor(lead => lead.Description, new { @class = "form-control" })</td>
+            </tr>
+            <tr>
+              <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(lead => lead.Status):</td>
+              <td class="col-md-8">@Html.EnumDropDownListFor(lead => lead.Status)</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </div>
+</div>

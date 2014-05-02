@@ -1,0 +1,36 @@
+﻿@using TMS.Web.UI.Helpers
+@model TMS.Entities.CourseExperience
+
+@{
+  Layout = string.Empty;
+}
+@using (Html.BeginForm("CourseDetails", "Instructor", FormMethod.Get, new { id = "courseExperienceForm" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-book fa-fw fa-lg"></i><strong>Course Details</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td class="col-md-4 text-right vert-align" style="border-top: none;"><strong>Title:</strong></td>
+        <td class="col-md-8" style="border-top: none;">
+          @Html.DropDownListFor(courseExperience => courseExperience.CourseId, ViewBag.Courses as IEnumerable<SelectListItem>, "Select One...", new { @class = "form-control" })
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(detail => detail.RelevantExperience):</td>
+        <td class="col-md-8">
+          <div class="input-group">
+            @Html.TextBoxFor(detail => detail.RelevantExperience, new { @class = "form-control text-right" })
+            <span class="input-group-addon">years</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="courseDetailSave"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/CourseExperienceValidations.js")"></script>

@@ -1,0 +1,46 @@
+﻿@{
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+  string method = string.Format("{0}{1}", string.IsNullOrWhiteSpace(Model.Id) ? "Create" : "Edit", @ViewBag.ControllerName);
+  string form = string.Format("{0}Form", @ViewBag.ControllerName.ToLower());
+}
+
+@using (FormExtensions.BeginForm(@Html, method, @ViewBag.ControllerName, FormMethod.Post, new { @id = form, @uid = @Model.Id }))
+{
+  <div class="row" style="padding-top: 15px;">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="btn-group">
+          <span class="btn btn-default" onclick="location.href='@Url.Action("Index", @ViewBag.ControllerName)'"><i class="fa fa-home fa-fw fa-lg"></i></span>
+          <span class="btn btn-default" id=@string.Format("save{0}", ViewBag.ControllerName)><i class="fa fa-save fa-fw fa-lg"></i></span>
+        </div>
+        <div class="btn-group">
+          <span class="btn btn-default"><i class="fa fa-print fa-fw fa-lg"></i></span>
+        </div>
+      </div>
+      <div class="panel-body">
+        @RenderBody()
+      </div>
+    </div>
+  </div>
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.bootstrap.popover.js")"></script>
+<script src=@Url.Content("~/Scripts/messenger/messenger.js")></script>
+<script src=@Url.Content("~/Scripts/messenger/messenger-theme-flat.js")></script>
+<script src=@Url.Content("~/Scripts/Common.js")></script>
+<script src=@Url.Content("~/Scripts/moment.js")></script>
+<script src=@Url.Content("~/Scripts/bootstrap-datetimepicker.js")></script>
+<script src=@Url.Content("~/Scripts/Validations.js")></script>
+@{
+  string edit = string.Format("~/Scripts/{0}_Create_Edit.js", ViewBag.ControllerName);
+  string validation = string.Format("~/Scripts/{0}Validations.js", ViewBag.ControllerName);
+}
+<script src=@Url.Content(edit)></script>
+<script src=@Url.Content(validation)></script>
+
+<link type="text/css" href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link type="text/css" href="~/Content/messenger/messenger.css" rel="stylesheet" />
+<link type="text/css" href="~/Content/messenger/messenger-theme-air.css" rel="stylesheet" />
+

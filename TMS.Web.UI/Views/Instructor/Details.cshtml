@@ -1,0 +1,274 @@
+﻿@using TMS.Web.UI.Helpers
+@using TMS.Entities
+@model Instructor
+
+@{
+  ViewBag.Title = "Course Detail";
+  Layout = "~/Views/Shared/_Details.cshtml";
+}
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-text list-group-item-info">
+    <i class="fa fa-tags fa-lg fa-fw"></i>
+    <strong>Personal Details</strong><i class="fa fa-chevron-down pull-right"></i>
+  </li>
+  <li class="list-group-item">
+    <table class="table table-condensed">
+      <tbody>
+        <tr>
+          <td class="text-right col-md-2" style="border-top: none;"><strong>Name:</strong></td>
+          <td class="col-md-4" style="border-top: none;">@Model.Salutation. @Model.LastName @Model.FirstName</td>
+          <td class="text-right col-md-2" style="border-top: none;"><strong>Instructor Type:</strong></td>
+          <td class="col-md-4" style="border-top: none;">@Html.PascalCaseToPrettyString(@Model.InstructorType)</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Experience:</strong></td>
+          <td>@Html.PascalCaseToPrettyString(@Model.Experience) years</td>
+          <td class="text-right"><strong>Referred By:</strong></td>
+          <td>
+            @if (ViewBag.Users != null)
+                    {
+                    @ViewBag.User.Name;
+                    }
+          </td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>City:</strong></td>
+          <td>@Model.City</td>
+          <td class="text-right"><strong>Country:</strong></td>
+          <td>
+            @if (ViewBag.Country != null)
+                    {
+                    @ViewBag.Country.Name
+                    }
+          </td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Date of Join:</strong></td>
+          <td>
+            @{
+                      if (Model.DateofJoin.HasValue)
+                      {
+                    <i class="glyphicon glyphicon-calendar"></i>
+                      }
+                    @Model.DateofJoin.FormatDateTime()
+            }
+          </td>
+          <td class="text-right"><strong>Date of Resignation:</strong></td>
+          <td>
+            @{
+                      if (Model.DateOfResignation.HasValue)
+                      {
+                    <i class="glyphicon glyphicon-calendar"></i>
+                      }
+                    @Model.DateOfResignation.FormatDateTime()
+            }
+          </td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Rating:</strong></td>
+          <td>
+            @if (Model.Rating.HasValue)
+                    {
+                      var s = Model.Rating.Value.ToString().Split('.');
+                      for (int i = 0; i < int.Parse(s[0]); i++)
+                      {
+                    <i class="fa fa-star fa-lg"></i>
+                      }
+
+                      float k = float.Parse('.' + s[1]);
+                      if (k <= .25f)
+                      {
+                    <i class="fa fa-star-o fa-lg"></i>
+                      }
+                      else if (k > .25f && k <= .75f)
+                      {
+                    <i class="fa fa-star-half-empty fa-lg"></i>
+                      }
+                      else
+                      {
+                    <i class="fa fa-star fa-lg"></i>
+                      }
+                      for (int i = 0; i < 5 - Math.Ceiling(Model.Rating.Value); i++)
+                      {
+                    <i class="fa fa-star-o fa-lg"></i>
+                      }
+                    }
+                    else
+                    {
+                    <i class="fa fa-star-o fa-lg"></i>
+                    }
+          </td>
+          <td class="col-md-2 text-right"><strong>Description:</strong></td>
+          <td>@Model.Description</td>
+        </tr>
+        <tr>
+          <td class="col-md-2 text-right"><strong>Status:</strong></td>
+          <td>@Model.Status</td>
+          <td colspan="2"></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+<div class="row">
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-phone fa-lg fa-fw"></i><strong>Communication Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      @if (Model.CommunicationDetails != null && Model.CommunicationDetails.Any())
+              {
+              <li class="list-group-item">
+                <table class="table table-condensed">
+                  <thead>
+                    <tr>
+                      <td class="text-right"><strong>Is Preferred?</strong>
+                      <td><strong>Comm. Type</strong></td>
+                      <td><strong>ID</strong></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach (CommunicationDetail communicationDetail in Model.CommunicationDetails)
+                      {
+                      <tr>
+                        <td class="text-right col-md-3">
+                          @if (communicationDetail.IsPreferred)
+                            {
+                            <i class="fa fa-check-square fa-lg"></i>
+                            }
+                        </td>
+                        <td class="col-md-3">
+                          @switch (communicationDetail.CommunicationType)
+                            {
+                              case CommunicationType.Email:
+                            <i id="brandicon" class="fa fa-envelope fa-lg"></i>
+                                break;
+                              case CommunicationType.Phone:
+                            <i id="brandicon" class="fa fa-phone-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Mobile:
+                            <i id="brandicon" class="fa fa-mobile fa-lg"></i>
+                                break;
+                              case CommunicationType.Skype:
+                            <i id="brandicon" class="fa fa-skype fa-lg"></i>
+                                break;
+                              case CommunicationType.Twitter:
+                            <i id="brandicon" class="fa fa-twitter-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Facebook:
+                            <i id="brandicon" class="fa fa-facebook-square fa-lg"></i>
+                                break;
+                              case CommunicationType.LinkedIn:
+                            <i id="brandicon" class="fa fa-linkedin-square fa-lg"></i>
+                                break;
+                              default:
+                            <i id="brandicon" class="fa fa-question fa-lg"></i>
+                                break;
+                            }
+                        </td>
+                        <td class="col-md-6">@communicationDetail.Uri</td>
+                      </tr>
+                      }
+                    <tr><td colspan="3"></td></tr>
+                  </tbody>
+                </table>
+              </li>
+              }
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item  list-group-item-text list-group-item-info"><i class="fa fa-book fa-lg fa-fw"></i><strong>Course Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <td class="col-md-6">
+                <strong>Title</strong>
+              </td>
+              <td class="col-md-6">
+                <strong>Relavent Experience</strong>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            @if (Model.Courses != null && Model.Courses.Any())
+                      {
+                        IEnumerable<Course> courses = ViewBag.Courses;
+                          foreach (CourseExperience id in Model.Courses)
+                          {
+                            var course = courses.Single(x => x.Id == id.CourseId);
+                    <tr>
+                      <td class="col-md-5">@course.Title</td>
+                      <td class="col-md-4">@id.RelevantExperience years</td>
+                    </tr>
+                          }
+                      }
+            <tr><td colspan="3"></td></tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-certificate fa-lg fa-fw"></i><strong>Certifications</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table table-condensed">
+          <tr>
+            <th class="col-md-4" style="border-top: none;">Title</th>
+            <th class="col-md-2" style="border-top: none;">Certifying Company</th>
+            <th class="col-md-2" style="border-top: none;">Certified Date</th>
+            <th class="col-md-2" style="border-top: none;">Valid thru</th>
+            <th class="col-md-2" style="border-top: none;">Score</th>
+          </tr>
+          @if (Model.Certifications != null && @Model.Certifications.Any())
+          {
+            foreach (Certification certification in Model.Certifications)
+            {
+              <tr>
+                <td class="col-md-3">@certification.Title</td>
+                <td class="col-md-3">@certification.CertifyingCompany</td>
+                <td class="col-md-2">@certification.CertifiedDate.FormatDateTime(false)</td>
+                <td class="col-md-2">@certification.ValidThru.FormatDateTime(false)</td>
+                <td class="col-md-2">@certification.Score</td>
+              </tr>
+            }
+          }
+          <tr><td colspan="5"></td></tr>
+        </table>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-money fa-lg fa-fw"></i><strong>Payments Made</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table table-condensed">
+          <tr>
+            <th class="col-md-4" style="border-top: none;">Amount</th>
+            <th class="col-md-2" style="border-top: none;">Paid On</th>
+            <th class="col-md-2" style="border-top: none;">Mode of Payment</th>
+            <th class="col-md-2" style="border-top: none;">Made by</th>
+          </tr>
+          @if (Model.Payments != null && @Model.Payments.Any())
+          {
+            foreach (PaymentsMade paymentsMade  in Model.Payments)
+            {
+              <tr>
+                <td class="col-md-3">@paymentsMade.Amount</td>
+                <td class="col-md-3">@paymentsMade.MadeOn.FormatDateTime(false)</td>
+                <td class="col-md-2">@Html.PascalCaseToPrettyString(paymentsMade.PaymentType)</td>
+                <td class="col-md-2">@paymentsMade.PaymentMadeBy</td>
+              </tr>
+            }
+          }
+          <tr><td colspan="5"></td></tr>
+        </table>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+﻿@model TMS.Entities.CourseTopic
+
+@{
+  ViewBag.Title = "Course Topic";
+  Layout = string.Empty;
+}
+@using (Html.BeginForm("Index", "CourseTopic", FormMethod.Get, new { @id = "courseTopicForm" }))
+{
+  <div class="modal fade" id="ct" tabindex="-1" role="dialog" aria-labelledby="titleSR" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <i class="fa fa-book fa-lg fa-fw"></i><strong>Course Required</strong>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-3 text-right padding-top">@Html.LabelFor(topic => topic.Title):</div>
+                <div class="col-md-9">@Html.TextBoxFor(topic => topic.Title, new { @class = "form-control", @id = "topicTitle" })</div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-3 text-right padding-top"><strong>Duration:</strong></div>
+                <div class="col-md-9">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                    @Html.TextBoxFor(topic => topic.Duration, new { @class = "form-control text-right", @Value = "0.00", @readonly = "readonly", @style = "padding-bottom: 5px;" })<span class="input-group-addon">hours</span>
+                    <div class="input-group-btn">
+                      <button type="button" class="btn"><i class="fa fa-minus"></i></button>
+                      <button type="button" class="btn"><i class="fa fa-plus"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-3 text-right padding-top">@Html.LabelFor(topic => topic.Description):</div>
+                <div class="col-md-9">@Html.TextBoxFor(topic => topic.Description, new { @class = "form-control", @id="topicDescription" })</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <span class="btn btn-outline btn-primary"><i class="glyphicon glyphicon-check"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+}

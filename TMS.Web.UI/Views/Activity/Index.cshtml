@@ -1,0 +1,54 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model ActivityEntity
+
+@{
+  ViewBag.Title = "Activities";
+  Layout = "../Shared/_Index.cshtml";
+}
+  <thead>
+    <tr>
+      <th></th>
+      <th>Activity Type</th>
+      <th>Assigned To</th>
+      <th>Due By</th>
+      <th>Priority</th>
+      <th>Activity Status</th>
+      <th>Activity Type</th>
+      <th>Notes</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    @{
+      //List<Country> countries = ViewBag.Countries;
+      if (ViewData["ActivityEntitys"] != null)
+      {
+        foreach (ActivityEntity activity in (List<ActivityEntity>)ViewData["ActivityEntitys"])
+        {
+          <tr>
+            <td style="text-align: center"><input type="checkbox" data="@activity.Id" /></td>
+            <td class="td" onclick="location.href='@Url.Action("Details", @ViewBag.ControllerName, new {id = activity.Id})' ">@Html.PascalCaseToPrettyString(activity.ActivityType)</td>
+            <td>
+              @*@{
+                  @users.Single(x => x.Id == activity.Id).UserName;
+                }*@
+              @*@Html.PascalCaseToPrettyString(@activity.AssignedTo)*@
+            </td>
+            <td>
+              @activity.DueBy.FormatDateTime()
+            </td>
+            <td>@activity.Priority</td>
+            <td>
+              @activity.ActivityStatus
+            </td>
+            <td>
+              @Html.PascalCaseToPrettyString(activity.ActivityType)
+            </td>
+            <td>@activity.Notes.Shorten(20)</td>
+            <td>@activity.Status</td>
+          </tr>
+        }
+      }
+    }
+  </tbody>

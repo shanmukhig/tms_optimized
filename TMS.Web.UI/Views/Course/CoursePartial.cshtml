@@ -1,0 +1,123 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Course
+
+@{
+  Layout = "../Shared/_CreateEditPartial.cshtml";
+}
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-text list-group-item-info">
+    <i class="fa fa-tags fa-fw fa-lg"></i>
+    <strong>Course Details</strong><i class="fa fa-chevron-down pull-right"></i>
+  </li>
+  <li class="list-group-item">
+    <table class="table">
+      <tr>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;"><strong>Title:</strong></td>
+        <td class="col-md-4" style="border-top: none;">@Html.TextBoxFor(course => course.Title, new { @class = "form-control" })</td>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;"><strong>Duration:</strong>
+        <td class="col-md-4" style="border-top: none;">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-clock-o fa-lg"></i></span>
+            @Html.TextBoxFor(course => course.Duration, new { @class = "form-control", @Value = @Model.Duration.ConvertToString(string.Empty), @readonly = "readonly" })
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align"><strong>Price:</strong></td>
+        <td class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-usd fa-lg"></i></span>
+            @Html.TextBoxFor(course => course.Price, new { @class = "form-control text-right" })
+            <span class="input-group-addon">.00</span>
+          </div>
+        </td>
+        <td class="col-md-2 text-right vert-align"><strong>Description:</strong></td>
+        <td class="col-md-4">@Html.TextBoxFor(course => course.Description, new { @class = "form-control" })</td>
+      </tr>
+    </table>
+  </li>
+</ul>
+<ul class="list-group">
+  <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-user fa-fw fa-lg"></i><strong>Instructor Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
+  <li class="list-group-item">
+    <table class="table" id="Instructor">
+      <tbody>
+        <tr>
+          <td colspan="4" style="border-top: none;"><span class="btn btn-primary btn-xs btn-primary btn-outline pull-right" data-toggle="modal" data-uri="@Url.Action("AddInstructorToCourse", "Instructor")" data-style="zoom-out"><i class="glyphicon glyphicon-plus"></i></span></td>
+        </tr>
+        <tr>
+          <td class="col-md-4"><strong>Name</strong></td>
+          <td class="col-md-2"><strong>Experience</strong></td>
+          <td class="col-md-6"><strong>Description</strong></td>
+          <td></td>
+        </tr>
+        @if (@Model.Instructors != null && @Model.Instructors.Any())
+        {
+          List<Instructor> instructors = ViewBag.Instructors;
+          foreach (Instructor i in @Model.Instructors.Select(instructor => instructors.Single(x => x.Id == instructor)))
+          {
+            <tr>
+              <td><input type="hidden" value="@i.Id">@i.Salutation, @i.LastName @i.FirstName</td>
+              <td>@i.Experience @i.Experience > 1 ? "year":"years" </td>
+              <td colspan="4">@i.Description</td>
+              <td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </li>
+</ul>
+<ul class="list-group">
+  <li class="list-group-item  list-group-item-text list-group-item-info"><i class="fa fa-list-alt fa-fw fa-lg"></i><strong>Topic Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
+  <li class="list-group-item">
+    <div class="table-responsive">
+      <table class="table table-condensed" id="coursesAdded">
+        <tbody>
+          <tr>
+            <td class="col-md-8" style="border-top:none;"><strong>Title</strong></td>
+            <td class="col-md-3" style="border-top:none;"><strong>Duration</strong></td>
+            <td class="col-md-1" style="border-top:none;"></td>
+          </tr>
+          <tr><td colspan="3"><span class="btn btn-primary btn-xs btn-primary btn-outline pull-right" data-toggle="modal" data-uri="@Url.Action("AddCourseTopic", "Course", new { @time = "hours", @cid = 0 })" data-style="zoom-out"><i class="glyphicon glyphicon-plus"></i></span></td></tr>
+          @if (@Model.CourseTopics != null && Model.CourseTopics.Any())
+          {
+            foreach (CourseTopic courseTopic in Model.CourseTopics.OrderBy(topic => topic.SequenceId))
+            {
+              <tr>
+                <td><span><i class="fa fa-plus-square fa-fw" style="cursor: pointer"></i></span>  @courseTopic.Title</td>
+                <td>@courseTopic.Duration.ConvertToString("hour")</td>
+                <td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="fa fa-times fa-lg fa-al"></i></span></td>
+              </tr>
+              if (courseTopic.CourseTopics != null && courseTopic.CourseTopics.Any())
+              {
+                <tr style="display: none">
+                  <td colspan="3" style="border-top:none;">
+                    <div class="table-responsive">
+                      <table class="table table-hover table-condensed" id="@courseTopic.SequenceId">
+                        <tbody>
+                          <tr><td colspan="4"><span class="btn btn-primary btn-xs btn-primary btn-outline pull-right" data-toggle="modal" data-uri="@Url.Action("AddCourseTopic", "Course", new { @time = "minutes", @cid = @courseTopic.SequenceId })" data-style="zoom-out"><i class="glyphicon glyphicon-plus"></i></span></td></tr>
+                          @foreach (CourseTopic ct in courseTopic.CourseTopics.OrderBy(topic => topic.SequenceId))
+                          {
+                            <tr>
+                              <td class="col-md-1"></td>
+                              <td class="col-md-7"><span><i class="fa fa-hand-o-right fa-fw" style="cursor: pointer"></i></span>  @ct.Title</td>
+                              <td class="col-md-3">@ct.Duration minutes</td>
+                              <td class="col-md-1"><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </li>
+</ul>

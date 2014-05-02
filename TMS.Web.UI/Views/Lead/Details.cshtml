@@ -1,0 +1,202 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Lead
+
+@{
+  ViewBag.Title = "Leads Detail";
+  Layout = "~/Views/Shared/_Details.cshtml";
+}
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-text list-group-item-info">
+    <i class="fa fa-tags fa-fw fa-lg"></i>
+    <strong>Personal Details</strong><i class="fa fa-chevron-down pull-right"></i>
+  </li>
+  <li class="list-group-item">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td class="text-right col-md-2" style="border-top: none;"><strong>Name:</strong></td>
+          <td class="col-md-4" style="border-top: none;">@Model.Salutation. @Model.LastName @Model.FirstName</td>
+          <td class="text-right col-md-2" style="border-top: none;"><strong>Lead Type:</strong></td>
+          <td class="col-md-4" style="border-top: none;">@Html.PascalCaseToPrettyString(@Model.LeadType)</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Lead Source:</strong></td>
+          <td>@Html.PascalCaseToPrettyString(@Model.LeadSource)</td>
+          <td class="text-right"><strong>Referred By:</strong></td>
+          <td>
+            @*@{
+                        List<User> users = ViewBag.Users;
+                        User referredBy = users.SingleOrDefault(x => @Model.ReferredBy == x.Id);
+                        if (referredBy != null)
+                        {
+                      @referredBy.Name;
+                        }
+              }*@
+          </td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>City:</strong></td>
+          <td>@Model.City</td>
+          <td class="text-right"><strong>Country:</strong></td>
+          <td>
+            @{
+              Country country = (ViewBag.Countries as IEnumerable<Country>).Single(x => x.Code.Equals(@Model.Country, StringComparison.InvariantCultureIgnoreCase));
+            }
+            @country.Name.TitleCase()
+          </td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Client Status:</strong></td>
+          <td>@Html.PascalCaseToPrettyString(Model.ClientStatus)</td>
+          <td class="text-right"><strong>Demo Date Time:</strong></td>
+          <td><i class="fa fa-clock-o fa-lg fa-fw"></i>@Model.DemoDateTime.FormatDateTime()</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Expected Date of Join:</strong></td>
+          <td><i class="glyphicon glyphicon-calendar"></i> @Model.ExpectedDateOfJoin.FormatDateTime()</td>
+          <td class="text-right"><strong>Assigned To:</strong></td>
+          <td>
+            @*@{
+              User user = users.SingleOrDefault(x => x.Id == @Model.AssignedTo);
+              if (user != null)
+              {
+                @user.Name
+              }
+            }*@
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-2 text-right"><strong>Description:</strong></td>
+          <td class="col-md-4">@Model.Description</td>
+          <td class="col-md-2 text-right"><strong>Status:</strong></td>
+          <td class="col-md-2">@Model.Status</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+<div class="row">
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-phone fa-fw fa-lg"></i>@Html.LabelForPascal(lead => lead.CommunicationDetails):<i class="fa fa-chevron-down pull-right"></i></li>
+      @if (Model.CommunicationDetails != null && Model.CommunicationDetails.Any())
+              {
+      <li class="list-group-item">
+        <table class="table">
+          <thead>
+            <tr>
+              <td class="text-right"><strong>Is Preferred?</strong>
+              <td><strong>Comm. Type</strong></td>
+              <td><strong>ID</strong></td>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (CommunicationDetail communicationDetail in Model.CommunicationDetails)
+                      {
+                    <tr>
+                      <td class="text-right col-md-3">
+                        @if (communicationDetail.IsPreferred)
+                            {
+                          <i class="fa fa-check-square fa-lg"></i>
+                            }
+                      </td>
+                      <td class="col-md-3">
+                        @switch (communicationDetail.CommunicationType)
+                            {
+                              case CommunicationType.Email:
+                          <i id="brandicon" class="fa fa-envelope fa-lg"></i>
+                                break;
+                              case CommunicationType.Phone:
+                          <i id="brandicon" class="fa fa-phone-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Mobile:
+                          <i id="brandicon" class="fa fa-mobile fa-lg"></i>
+                                break;
+                              case CommunicationType.Skype:
+                          <i id="brandicon" class="fa fa-skype fa-lg"></i>
+                                break;
+                              case CommunicationType.Twitter:
+                          <i id="brandicon" class="fa fa-twitter-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Facebook:
+                          <i id="brandicon" class="fa fa-facebook-square fa-lg"></i>
+                                break;
+                              case CommunicationType.LinkedIn:
+                          <i id="brandicon" class="fa fa-linkedin-square fa-lg"></i>
+                                break;
+                              case CommunicationType.Fax:
+                          <i id="brandicon" class="fa fa-print fa-lg"></i>
+                                break;
+                              default:
+                          <i id="brandicon" class="fa fa-question fa-lg"></i>
+                                break;
+                            }
+                      </td>
+                      <td class="col-md-6">@communicationDetail.Uri</td>
+                    </tr>
+                      }
+            <tr><td colspan="3"></td></tr>
+          </tbody>
+        </table>
+      </li>
+              }
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-clock-o fa-fw fa-lg"></i>@Html.LabelForPascal(lead => lead.BestTimeToContact)<i class="fa fa-chevron-down pull-right"></i></li>
+      @if (Model.BestTimeToContact != null && @Model.BestTimeToContact.Any())
+              {
+      <li class="list-group-item">
+        <table class="table">
+          @foreach (DateTime? dateTime in Model.BestTimeToContact)
+                    {
+                  <tr>
+                    <td><i class="fa fa-clock-o fa-lg fa-fw"></i>@dateTime.FormatDateTime()</td>
+                  </tr>
+                    }
+        </table>
+      </li>
+              }
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <ul class="list-group">
+      <li class="list-group-item  list-group-item-text list-group-item-info"><i class="fa fa-book fa-fw fa-lg"></i><strong>Course Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table">
+          <thead>
+            <tr>
+              <td>
+                <strong>Title</strong>
+              </td>
+              <td>
+                <strong>Service Required</strong>
+              </td>
+              <td class="text-right"><strong>Amount Quoted</strong></td>
+            </tr>
+          </thead>
+          <tbody>
+            @if (Model.Courses != null && Model.Courses.Any())
+            {
+              var courses = ViewBag.Courses as List<Course>;
+              foreach (CourseRequested courseRequested in Model.Courses)
+              {
+                <tr>
+                  <td class="col-md-5">@courses.Single(x => x.Id == courseRequested.CourseId).Title</td>
+                  <td class="col-md-4">@Html.PascalCaseToPrettyString(courseRequested.ServiceRequired)</td>
+                  <td class="text-right col-md-3"><i class="fa fa-usd fa-fw"></i>@courseRequested.AmountQuoted.ToCurrencyString()</td>
+                </tr>
+              }
+            }
+            <tr><td colspan="3"></td></tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </div>
+</div>

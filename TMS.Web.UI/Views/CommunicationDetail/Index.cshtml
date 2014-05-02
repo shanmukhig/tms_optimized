@@ -1,0 +1,84 @@
+﻿@using TMS.Entities
+@model CommunicationDetail
+@{
+  Layout = string.Empty;
+}
+
+@using (Html.BeginForm("Index", "CommunicationDetail", FormMethod.Get, new { @id = "communicationDetailForm" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-phone fa-lg fa-fw"></i><strong>Communication Detail</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td class="col-md-2 vert-align text-right" style="border-top: none;">@Html.LabelFor(detail => detail.Uri):</td>
+          <td class="col-md-9" style="border-top: none;">
+            <div class="input-group">
+              <div class="input-group-btn">
+                <button class="btn btn-default dropdown-toggle" id="CommunicationType" name="CommunicationType" data-toggle="dropdown">
+                  <i class="fa fa-question fa-lg"></i>
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-left dm">
+                  @{
+                    IEnumerable<CommunicationType> ct = Enum.GetValues(typeof (CommunicationType)).Cast<CommunicationType>();
+                    foreach (CommunicationType communicationType in ct)
+                    {
+                      string cls;
+                      switch (communicationType)
+                      {
+                        case CommunicationType.Email:
+                          cls = "fa fa-envelope fa-lg";
+                          break;
+                        case CommunicationType.Phone:
+                          cls = "fa fa-phone fa-lg";
+                          break;
+                        case CommunicationType.Mobile:
+                          cls = "fa fa-mobile fa-lg";
+                          break;
+                        case CommunicationType.Skype:
+                          cls = "fa fa-skype fa-lg";
+                          break;
+                        case CommunicationType.Twitter:
+                          cls = "fa fa-twitter fa-lg";
+                          break;
+                        case CommunicationType.Facebook:
+                          cls = "fa fa-facebook fa-lg";
+                          break;
+                        case CommunicationType.LinkedIn:
+                          cls = "fa fa-linkedin fa-lg";
+                          break;
+                        default:
+                          cls = "fa fa-question fa-lg";
+                          break;
+                      }
+                      int val = (int) communicationType;
+                      <li style="cursor: pointer;"><a data-value="@val"><i class="@cls"></i></a></li>
+                    }
+                  }
+                </ul>
+              </div>
+              @Html.TextBoxFor(detail => detail.Uri, new { @class = "form-control" })
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="communicationDetailSave"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<style>
+  .dm {
+    -moz-min-width: 0;
+    -ms-min-width: 0;
+    -o-min-width: 0;
+    -webkit-min-width: 0;
+    min-width: 0;
+  }
+</style>
+<script src="@Url.Content("~/Scripts/CommunicationDetailValidations.js")"></script>

@@ -1,0 +1,44 @@
+﻿@{
+  //ViewBag.Title = ViewBag.Title;
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="padding-top: 15px;">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search @ViewBag.ControllerName..." role="search" data-url="@Url.Action("Search", @ViewBag.ControllerName, new { searchString = "{searchString}" })">
+            <span class="btn btn-default input-group-addon"><i class="text-primary fa fa-lg fa-fw fa-search"></i></span>
+          </div>
+        </div>
+        <div class="btn-group">
+          <span class="btn btn-default"><i class="text-info fa fa-lg fa-fw fa-check-square-o"></i></span>
+          <span class="btn btn-default"><i class="text-warning fa fa-lg fa-fw fa-wheelchair"></i></span>
+          <span class="btn btn-default"><i class="text-danger fa fa-lg fa-fw fa-trash-o"></i></span>
+        </div>
+        <div class="btn-group">
+          <span class="btn btn-default" onclick="location.href='@Url.Action("Create", @ViewBag.ControllerName)'"><i class="fa fa-lg text-primary fa-fw fa-user"></i></span>
+          <span class="btn btn-default"><i class="text-muted fa fa-print fa-lg fa-fw"></i></span>
+        </div>
+        <div class="btn-group">
+          <span class="text-warning btn btn-default"><i class="fa fa-refresh fa-lg fa-fw"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="dataTables-example">
+          @RenderBody()
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="@Url.Content("~/Scripts/messenger/messenger.js")"></script>
+<script src="@Url.Content("~/Scripts/messenger/messenger-theme-flat.js")"></script>
+<script src="@Url.Content("~/Scripts/Common.js")"></script>
+<script src="@Url.Content("~/Scripts/Index.js")"></script>
+<link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/messenger/messenger.css")" />
+<link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/messenger/messenger-theme-air.css")" />

@@ -1,0 +1,40 @@
+﻿@using TMS.Entities
+@model Instructor
+
+@{
+  Layout = string.Empty;
+}
+
+@using (Html.BeginForm("AddInstructorToCourse", "Instructor", FormMethod.Get, new { @id = "addInstructorToCourseForm" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-user fa-lg fa-fw"></i><strong>Instructor</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td class="col-md-3 text-right vert-align" style="border-top: none;"><strong>Instructor:</strong></td>
+        <td class="col-md-9" style="border-top: none;">
+          <div class='input-group date' id="dtBestTimeToContact">
+            <span class="input-group-addon"><i class="fa fa-user fa-lg"></i></span>
+            <select class="form-control" id="InstructorSelect" name="InstructorSelect">
+              @{
+                <option value="">Select One...</option>
+                List<Instructor> instructors = ViewBag.Instructors;
+                foreach (Instructor instructor in instructors)
+                {
+                <option value="@instructor.Id,@instructor.Salutation. @instructor.LastName @instructor.FirstName,@instructor.Experience,@instructor.Description">@instructor.Salutation. @instructor.LastName @instructor.FirstName</option>
+                }
+              }
+            </select>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="AddInstructor"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<script language="javascript" type="text/javascript" src="@Url.Content("~/Scripts/AddInstructorValidations.js")"></script>

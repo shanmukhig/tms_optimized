@@ -1,0 +1,39 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Instructor
+
+@{
+  ViewBag.Title = "Instructor";
+  Layout = "~/Views/Shared/_Index.cshtml";
+}
+<thead>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>Date of Join</th>
+    <th>Experience</th>
+    <th>Instructor Type</th>
+    @*<th>Country</th>*@
+    <th>Status</th>
+  </tr>
+</thead>
+<tbody>
+  @{
+    IEnumerable<Instructor> instructors = ViewData["Instructors"] as List<Instructor>;
+    if (instructors != null && instructors.Any())
+    {
+      foreach (Instructor instructor in instructors)
+      {
+        <tr>
+          <td class="text-center"><input type="checkbox" data="@instructor.Id" /></td>
+          <td class="td" onclick="location.href='@Url.Action("Details", "Instructor", new {id = instructor.Id})'">@instructor.Salutation. @instructor.LastName, @instructor.FirstName</td>
+          <td>@instructor.DateofJoin.FormatDateTime()</td>
+          <td>@string.Format("{0} year{1}", @instructor.Experience, instructor.Experience != null && instructor.Experience.Value > 1 ? "s" : string.Empty)
+          <td>@Html.PascalCaseToPrettyString(@instructor.InstructorType)</td>
+          @*<td>@instructor.Country</td>*@
+          <td>@instructor.Status</td>
+        </tr>
+      }
+    }
+  }
+</tbody>

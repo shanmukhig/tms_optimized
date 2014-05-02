@@ -1,0 +1,42 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model CourseRequested
+
+@{
+  Layout = string.Empty;
+}
+@using (Html.BeginForm("index", "CourseRequested", FormMethod.Get, new { id = "courseRequiredForm" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-book fa-lg fa-fw"></i><strong>Course Required</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td class="col-md-4 text-right vert-align" style="border-top: none;"><strong>Title:</strong></td>
+        <td class="col-md-8" style="border-top: none;">
+          @Html.DropDownListFor(requested => requested.CourseId, ViewBag.Courses as IEnumerable<SelectListItem>, "Select One...", new { @class = "form-control" })
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(detail => detail.ServiceRequired):</td>
+        <td class="col-md-8">@Html.EnumDropDownListFor(detail => detail.ServiceRequired)</td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(detail => detail.AmountQuoted):</td>
+        <td class="col-md-8">
+          <div class='input-group'>
+            <span class="input-group-addon"><i class="fa fa-usd fa-lg"></i></span>
+            @Html.TextBoxFor(detail => detail.AmountQuoted, new { @class = "form-control text-right" })
+            <span class="input-group-addon">.00</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="ServiceRequiredSave"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<script src="@Url.Content("~/Scripts/CourseRequiredValidations.js")"></script>

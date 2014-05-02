@@ -1,0 +1,57 @@
+﻿@using TMS.Web.UI.Helpers
+@model TMS.Entities.Certification
+
+@{
+  Layout = string.Empty;
+}
+@using (Html.BeginForm("CertificationDetails", "Instructor", FormMethod.Get, new { id = "certificationDetailsForm" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-certificate fa-lg fa-fw"></i><strong>Certification Details</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td class="col-md-4 text-right vert-align" style="border-top: none;">@Html.LabelFor(certification => certification.Title):</td>
+        <td class="col-md-8" style="border-top: none;">
+          @Html.TextBoxFor(certification => certification.Title, new { @class = "form-control" })
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(certification => certification.CertifyingCompany):</td>
+        <td class="col-md-8">
+          @Html.TextBoxFor(certification => certification.CertifyingCompany, new { @class = "form-control" })
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(certification => certification.CertifiedDate):</td>
+        <td class="col-md-8">
+          <div class='input-group date' id="certDate">
+            @Html.TextBoxFor(certification => certification.CertifiedDate, "{0:dddd MMMM, dd yyyy}", new { @class = "form-control datetimepicker", @readonly = true })
+            <span class="input-group-addon btn-outline btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(certification => certification.ValidThru):</td>
+        <td class="col-md-8">
+          <div class='input-group date' id="expDate">
+            @Html.TextBoxFor(certification => certification.ValidThru, "{0:dddd MMMM, dd yyyy}", new { @class = "form-control datetimepicker", @readonly = true })
+            <span class="input-group-addon btn-outline btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(certification => certification.Score):</td>
+        <td class="col-md-8">
+          @Html.TextBoxFor(certification => certification.Score, new { @class = "form-control text-right" })
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="certificationDetailSave"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<script src="@Url.Content("~/Scripts/CertificationDetailsValidations.js")"></script>

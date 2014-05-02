@@ -1,0 +1,30 @@
+﻿@model dynamic
+
+@{
+  Layout = string.Empty;
+}
+
+@using (Html.BeginForm("Index", "BestTimeToContact", FormMethod.Get, new { @id = "bestTimetoContactForm" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-phone fa-lg fa-fw"></i><strong>Best Time to Contact</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td class="col-md-4 text-right vert-align" style="border-top: none;"><strong>Best Time to Contact:</strong></td>
+        <td class="col-md-8" style="border-top: none;">
+          <div class='input-group date' id="dtBestTimeToContact">
+            <input type="text" class="form-control" readonly="readonly" id="BestTimeToContact" name="BestTimeToContact" />
+            <span class="input-group-addon btn-outline btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="BestTimeSave"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<script src="@Url.Content("~/Scripts/BestTimeToContactValidations.js")"></script>

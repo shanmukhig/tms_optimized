@@ -1,0 +1,50 @@
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Lead
+
+@{
+  ViewBag.Title = "Leads";
+  Layout = "../Shared/_Index.cshtml";
+}
+          <thead>
+            <tr>
+              <th></th>
+              <th>Title</th>
+              <th>Lead Type</th>
+              <th>Lead Source</th>
+              <th>City</th>
+              <th>Country</th>
+              <th>Client Status</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @{
+              List<Country> countries = ViewBag.Countries;
+              if (ViewBag.Leads == null)
+              {
+                return;
+              }
+              foreach (Lead lead in ViewBag.Leads)
+              {
+                <tr>
+                  <td style="text-align: center"><input type="checkbox" data="@lead.Id" /></td>
+                  <td class="td" onclick="location.href='@Url.Action("Details", "Lead", new {id = lead.Id})'">@lead.Salutation. @lead.LastName, @lead.FirstName</td>
+                  <td>
+                    @Html.PascalCaseToPrettyString(@lead.LeadType)
+                  </td>
+                  <td>
+                    @Html.PascalCaseToPrettyString(@lead.LeadSource)
+                  </td>
+                  <td>@lead.City</td>
+                  <td>
+                    @countries.Single(x => x.Code.Equals(lead.Country, StringComparison.InvariantCultureIgnoreCase)).Name.TitleCase()
+                  </td>
+                  <td>
+                    @Html.PascalCaseToPrettyString(lead.ClientStatus)
+                  </td>
+                  <td>@lead.Status</td>
+                </tr>
+              }
+            }
+          </tbody>
