@@ -38,17 +38,17 @@
           <td class="col-md-4">@Html.EnumDropDownListFor(instructor => instructor.InstructorType)</td>
           <td class="text-right vert-align col-md-2">@Html.LabelForPascal(instructor => instructor.ReferredBy):</td>
           <td>
-            @*@{
-              List<User> users = ViewBag.Users;
-              var selectListItem = from u in users
+            @{
+              List<dynamic> details = ViewBag.Details as List<dynamic>;
+              var selectListItem = from u in details
                                    select new SelectListItem
                                    {
-                                     Selected = !string.IsNullOrWhiteSpace(Model.ReferredBy) && Model.ReferredBy == u.Id,
+                                     Selected = @Model.ReferredBy == u.Id,
                                      Text = u.Name,
                                      Value = u.Id
                                    };
             }
-            @Html.DropDownListFor(instructor => instructor.ReferredBy, selectListItem, "Select One...", new { @class = "form-control" })*@
+            @Html.DropDownListFor(lead => lead.ReferredBy, selectListItem, "Select One...", new { @class = "form-control" })
           </td>
         </tr>
         <tr>
@@ -56,7 +56,7 @@
           <td class="col-md-4">@Html.TextBoxFor(instructor => instructor.City, new { @class = "form-control" })</td>
           <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(instructor => instructor.Country):</td>
           <td class="col-md-4">
-            @*@{
+            @{
               List<Country> countries = ViewBag.Countries;
               selectListItem = countries.Select(c => new SelectListItem
               {
@@ -65,7 +65,7 @@
                 Value = c.Id
               });
             }
-            @Html.DropDownListFor(instructor => instructor.Country, selectListItem, "Select One...", new { @class = "form-control" })*@
+            @Html.DropDownListFor(instructor => instructor.Country, selectListItem, "Select One...", new { @class = "form-control" })
         </tr>
         <tr>
           <td class="col-md-2 vert-align text-right">@Html.LabelForPascal(instructor => instructor.DateofJoin):</td>
@@ -272,9 +272,45 @@
               }
             }
           </tbody>
-
         </table>
       </li>
     </ul>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-12">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-money fa-lg fa-fw"></i><strong>Payments Made</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <table class="table table-condensed" id="paymentsMade">
+          <tr>
+            <td colspan="6" style="border-top:none;"><span class="btn btn-primary btn-xs btn-primary btn-outline pull-right" data-toggle="modal" data-uri="@Url.Action("PaymentsMade", "Instructor")" data-style="zoom-out"><i class="glyphicon glyphicon-plus"></i></span></td>
+          </tr>
+          <tr>
+            <td class="col-md-4">Amount</td>
+            <td class="col-md-2">Paid On</td>
+            <td class="col-md-2">Mode of Payment</td>
+            <td class="col-md-3">Made by</td>
+            <td></td>
+          </tr>
+          @if (Model.Payments != null && @Model.Payments.Any())
+          {
+            details = ViewBag.Details as List<dynamic>;
+            foreach (PaymentsMade paymentsMade in Model.Payments)
+            {
+              var detail = details.SingleOrDefault(x => x.Id == paymentsMade.PaymentMadeBy);
+              <tr>
+                <td class="col-md-3"><input type="hidden" value="@paymentsMade.PaymentMadeBy">@paymentsMade.Amount</td>
+                <td class="col-md-3">@paymentsMade.MadeOn.FormatDateTime(false)</td>
+                <td class="col-md-2">@Html.PascalCaseToPrettyString(paymentsMade.PaymentType)</td>
+                <td class="col-md-2">@detail == null ? @string.Empty : @detail.Name</td>
+                <td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td>
+              </tr>
+            }
+          }
+        </table>
+      </li>
+    </ul>
+  </div>
+</div>
+

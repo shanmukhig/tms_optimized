@@ -57,6 +57,31 @@ namespace TMS.Web.UI.Tests
   [TestClass]
   public class LeadSerializer
   {
+    [TestMethod]
+    public void SerializeContact()
+    {
+      Contact contact = new Contact
+      {
+        Address = "NE 195th Street",
+        CommunicationDetails = new List<CommunicationDetail>
+        {
+          new CommunicationDetail
+          {
+            CommunicationType = CommunicationType.Email,
+            IsPreferred = true,
+            Uri = "shanmukhig@live.com"
+          }
+        },
+        Status = Status.Active,
+        LastName = "Goli",
+        Salutation = Salutation.Mr,
+        Title = "Title",
+        Zip = "98001",
+        CompanyName = "Microsoft Corporation",
+        FirstName = "Shanmukhi Goli",
+      };
+      var serializeObject = JsonConvert.SerializeObject(contact);
+    }
 
     [TestMethod]
     public void SerializeUser()

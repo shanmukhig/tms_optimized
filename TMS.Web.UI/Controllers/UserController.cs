@@ -7,22 +7,24 @@ namespace TMS.Web.UI.Controllers
   public class UserController : CustomController<User>
   {
     private readonly IWebService<User> _userWebService;
+    //private readonly IuserExtentions _userExtentions;
 
-    public UserController(IWebService<User> userWebService) : base(userWebService)
+    public UserController(IWebService<User> userWebService, IuserExtentions userExtentions) : base(userWebService, userExtentions)
     {
       _userWebService = userWebService;
+      //_userExtentions = userExtentions;
     }
 
-    public override ActionResult Index()
-    {
-      ViewBag.
-      return base.Index();
-    }
+    //public override ActionResult Index()
+    //{
+    //  //ViewBag.Details = _userExtentions.GetUserDetails(ViewBag.Users as IEnumerable<User>);
+    //  return base.Index();
+    //}
 
     //
     // GET: /User/Details/5
 
-    public ActionResult Details(string id)
+    public override ActionResult Details(string id)
     {
       return View(_userWebService.Get(id));
     }
@@ -30,7 +32,7 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /User/Create
 
-    public ActionResult Create()
+    public override ActionResult Create()
     {
       return View(new User());
     }
@@ -56,7 +58,7 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /User/Edit/5
 
-    public ActionResult Edit(string id)
+    public override ActionResult Edit(string id)
     {
       return View(_userWebService.Get(id));
     }

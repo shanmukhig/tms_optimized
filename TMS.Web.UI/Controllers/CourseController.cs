@@ -26,7 +26,7 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /Course/Details/5
 
-    public ActionResult Details(string id)
+    public override ActionResult Details(string id)
     {
       return View(_courseWebService.Get(id));
     }
@@ -34,7 +34,7 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /Course/Create
 
-    public ActionResult Create()
+    public override ActionResult Create()
     {
       return View(new Course());
     }
@@ -59,7 +59,7 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /Course/Edit/5
 
-    public ActionResult Edit(string id)
+    public override ActionResult Edit(string id)
     {
       return View("Edit", _courseWebService.Get(id));
     }

@@ -19,17 +19,17 @@ namespace TMS.Web.UI.Controllers
     //  return View();
     //}
 
-    public ActionResult Details(string id)
+    public override ActionResult Details(string id)
     {
       return View("Details", _activityWebService.Get(id));
     }
 
-    public ActionResult Create()
+    public override ActionResult Create()
     {
       return View(new ActivityEntity());
     }
 
-    public ActionResult Edit(string id)
+    public override ActionResult Edit(string id)
     {
       return View(_activityWebService.Get(id));
     }

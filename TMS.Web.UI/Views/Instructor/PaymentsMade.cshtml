@@ -1,0 +1,62 @@
+﻿@using TMS.Web.UI.Helpers
+@model TMS.Entities.PaymentsMade
+
+@{
+  Layout = string.Empty;
+}
+@using (Html.BeginForm("PaymentsMade", "Instructor", FormMethod.Get, new { id = "paymentsMadeForm" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <i class="fa fa-money fa-lg fa-fw"></i><strong>Payment Details</strong>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td class="col-md-4 text-right vert-align" style="border-top: none;">@Html.LabelFor(paymentsMade => paymentsMade.Amount):</td>
+        <td class="col-md-8" style="border-top: none;">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-money fa-lg"></i></span>
+            @Html.TextBoxFor(certification => certification.Amount, new { @class = "form-control text-right" })
+            <span class="input-group-addon">.00</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(paymentsMade => paymentsMade.MadeOn):</td>
+        <td class="col-md-8">
+          <div class="input-group date" id="paymentDate">
+            @Html.TextBoxFor(certification => certification.MadeOn, "{0:dddd MMM, dd yyyy}", new { @class = "form-control datetimepicker", @readonly = true })
+            <span class="input-group-addon btn-outline btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right">@Html.LabelForPascal(certification => certification.PaymentMadeBy):</td>
+        <td class="col-md-8">
+          @{
+  List<dynamic> details = ViewBag.Details as List<dynamic>;
+  var selectListItem = from u in details
+                       select new SelectListItem
+                       {
+                         Selected = @Model.PaymentMadeBy == u.Id,
+                         Text = u.Name,
+                         Value = u.Id
+                       };
+          }
+          @Html.DropDownListFor(lead => lead.PaymentMadeBy, selectListItem, "Select One...", new { @class = "form-control" })
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-4 vert-align text-right"><strong>Mode of Payment</strong>:</td>
+        <td class="col-md-8">
+          @Html.EnumDropDownListFor(made => made.PaymentType)
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-outline btn-primary" id="paymentsMadeSave"><i class="fa fa-check-square-o fa-lg fa-fw"></i>Add</span>
+  </div>
+}
+<script src="@Url.Content("~/Scripts/PaymentsMadeValidations.js")"></script>

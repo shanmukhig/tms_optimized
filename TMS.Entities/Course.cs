@@ -91,7 +91,7 @@ namespace TMS.Entities
 
   public class PaymentsMade
   {
-    public decimal Amount { get; set; }
+    public decimal? Amount { get; set; }
     public DateTime? MadeOn { get; set; }
     public PaymentType PaymentType { get; set; }
     public string PaymentMadeBy { get; set; }

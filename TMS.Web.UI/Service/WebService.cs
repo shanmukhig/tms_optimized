@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,13 +18,15 @@ namespace TMS.Web.UI.Service
     private readonly IWebService<Lead> _leadWebService;
     private readonly IWebService<Instructor> _instructorWebService;
     private readonly IWebService<InternalUser> _internalUserWebService;
+    private readonly IWebService<User> _userWebService;
 
     public UserExtentions(IWebService<Lead> leadWebService, IWebService<Instructor> instructorWebService,
-      IWebService<InternalUser> internalUserWebService)
+      IWebService<InternalUser> internalUserWebService, IWebService<User> userWebService)
     {
       _leadWebService = leadWebService;
       _instructorWebService = instructorWebService;
       _internalUserWebService = internalUserWebService;
+      _userWebService = userWebService;
     }
 
     public dynamic GetUserDetails(User user)
@@ -30,15 +34,22 @@ namespace TMS.Web.UI.Service
       return GetUserDetails(new List<User> {user}).Single();
     }
 
+    public dynamic GetUserDetails(string id)
+    {
+      return GetUserDetails(new List<string> {id}).SingleOrDefault();
+    }
+
+    public IEnumerable<dynamic> GetUserDetails(IEnumerable<string> ids)
+    {
+      return GetUserDetails(ids.Where(x => !string.IsNullOrWhiteSpace(x)).Select(id => _userWebService.Get(id)));
+    }
+
     private static dynamic GetDetail(DemographicDetail detail, string id)
     {
-      return new
-      {
-        Id = id,
-        Salutation = detail.Salutation.ToString(),
-        detail.FirstName,
-        detail.LastName
-      };
+      dynamic d = new ExpandoObject();
+      d.Id = id;
+      d.Name = string.Format("{0}. {1}, {2} ", detail.Salutation, detail.LastName, detail.FirstName);
+      return d;
     }
 
     public IEnumerable<dynamic> GetUserDetails(IEnumerable<User> users)
@@ -74,12 +85,20 @@ namespace TMS.Web.UI.Service
       }
       return details;
     }
+
+    public IEnumerable<dynamic> GetUserDetails()
+    {
+      return GetUserDetails(_userWebService.Get((int?) null));
+    }
   }
 
   public interface IuserExtentions
   {
     IEnumerable<dynamic> GetUserDetails(IEnumerable<User> users);
     dynamic GetUserDetails(User user);
+    IEnumerable<dynamic> GetUserDetails(IEnumerable<string> ids);
+    IEnumerable<dynamic> GetUserDetails();
+    dynamic GetUserDetails(string id);
   }
 
   public class WebService<T> : IWebService<T> where T : class

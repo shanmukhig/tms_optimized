@@ -150,6 +150,13 @@ $('#saveLead').click(function() {
           showCloseButton: true
         });
       },
+      beforeSend: function() {
+        d.modal('hide').on('hidden.bs.modal', function () { $(this).remove(); }).appendTo('body');
+        d.modal('show');
+      },
+      complete: function() {
+        $(d).modal('hide');
+      },
       failure: function(result) {
         Messenger().post({
           message: String.format('Failed to {0} Lead. Error: {1}', isCreate() ? 'create' : 'Update', result),

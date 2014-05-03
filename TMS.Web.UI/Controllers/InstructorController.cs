@@ -14,25 +14,27 @@ namespace TMS.Web.UI.Controllers
     private readonly IWebService<Course> _courseWebService;
     private readonly IWebService<Country> _countryWebService;
     private readonly IWebService<User> _userWebService;
+    private readonly IuserExtentions _userExtentions;
 
-    public InstructorController(IWebService<Instructor> instructorWebService, IWebService<Course> courseWebService, IWebService<Country> countryWebService, IWebService<User> userWebService) : base(instructorWebService)
+    public InstructorController(IWebService<Instructor> instructorWebService, IWebService<Course> courseWebService, IWebService<Country> countryWebService, IWebService<User> userWebService, IuserExtentions userExtentions) : base(instructorWebService)
     {
       _instructorWebService = instructorWebService;
       _courseWebService = courseWebService;
       _countryWebService = countryWebService;
       _userWebService = userWebService;
+      _userExtentions = userExtentions;
     }
 
     //
     // GET: /Instructor/Details/5
 
-    public ActionResult Details(string id)
+    public override ActionResult Details(string id)
     {
       Instructor instructor = _instructorWebService.Get(id);
       if (!string.IsNullOrWhiteSpace(instructor.Country))
         ViewBag.Country = _countryWebService.Get(instructor.Country);
       if (!string.IsNullOrWhiteSpace(instructor.ReferredBy))
-        ViewBag.User = _userWebService.Get(instructor.ReferredBy);
+        ViewBag.Details = _userExtentions.GetUserDetails(instructor.ReferredBy);
       if (instructor.Courses != null && instructor.Courses.Any())
       {
         List<Course> courses = new List<Course>();
@@ -45,11 +47,16 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /Instructor/Create
 
-    public ActionResult Create()
+    public override ActionResult Create()
+    {
+      SetupCreateEdit();
+      return View(new Instructor());
+    }
+
+    private void SetupCreateEdit()
     {
       ViewBag.Countries = _countryWebService.Get((int?)null);
-      ViewBag.Users = _userWebService.Get((int?)null);
-      return View(new Instructor());
+      ViewBag.Details = _userExtentions.GetUserDetails();
     }
 
     //
@@ -88,11 +95,10 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /Instructor/Edit/5
 
-    public ActionResult Edit(string id)
+    public override ActionResult Edit(string id)
     {
       Instructor instructor = _instructorWebService.Get(id);
-      ViewBag.Countries = _countryWebService.Get((int?)null);
-      ViewBag.Users = _userWebService.Get((int?)null);
+      SetupCreateEdit();
       if (instructor.Courses != null && instructor.Courses.Any())
       {
         List<Course> courses = new List<Course>();
@@ -151,6 +157,12 @@ namespace TMS.Web.UI.Controllers
     public ActionResult CertificationDetails()
     {
       return View();
+    }
+
+    public ActionResult PaymentsMade()
+    {
+      ViewBag.Details = _userExtentions.GetUserDetails();
+      return View(new PaymentsMade());
     }
   }
 }

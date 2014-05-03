@@ -280,6 +280,7 @@
     <Content Include="Scripts\messenger\messenger.min.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
     <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\PaymentsMadeValidations.js" />
     <Content Include="Scripts\star-rating.js" />
     <Content Include="Scripts\Validations.js" />
     <Content Include="Web.config">
@@ -362,6 +363,11 @@
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Shared\_Details.cshtml" />
     <Content Include="Views\Shared\_CreateEditPartial.cshtml" />
+    <Content Include="Views\Instructor\PaymentsMade.cshtml" />
+    <Content Include="Views\Contact\Index.cshtml" />
+    <Content Include="Views\Contact\Edit.cshtml" />
+    <Content Include="Views\Contact\Details.cshtml" />
+    <Content Include="Views\Contact\Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

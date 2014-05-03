@@ -1,4 +1,6 @@
-﻿$('body').delegate('span i.fa-plus-square, i.fa-minus-square', 'click', function (e) {
+﻿var d = $('<div class="modal fade" id="processing" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><div class="row"><div class="col-md-5"></div><i class="fa fa-spinner fa-spin fa-2x"></i></div></div></div></div></div>');
+
+$('body').delegate('span i.fa-plus-square, i.fa-minus-square', 'click', function (e) {
   $(this).toggleClass('fa-minus-square fa-plus-square');
   $($(this).parent().parent().parent().next()).slideToggle();
 });
@@ -45,8 +47,6 @@ $(function() {
     if ($(this).attr('data-uri') == '' || $(this).attr('data-uri') == undefined)
       return;
     e.preventDefault();
-
-    var d = $('<div class="modal fade" id="processing" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><div class="row"><div class="col-md-5"></div><i class="fa fa-spinner fa-spin fa-2x"></i></div></div></div></div></div>');
 
     $.ajax({
       type: 'GET',

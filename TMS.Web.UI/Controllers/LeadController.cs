@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using TMS.Entities;
 using TMS.Entities.Enum;
@@ -9,17 +11,30 @@ namespace TMS.Web.UI.Controllers
   public class LeadController : CustomController<Lead>
   {
     private readonly IWebService<Lead> _leadService;
+    private readonly IWebService<Course> _courseWebService;
+    private readonly IWebService<Country> _countryWebService;
+    private readonly IuserExtentions _userExtentions;
 
-    public LeadController(IWebService<Lead> leadService, IWebService<User> userService,
-      IWebService<Course> courseWebService, IWebService<Country> countryWebService) : base(leadService)
+    public LeadController(IWebService<Lead> leadService, //IWebService<User> userService,
+      IWebService<Course> courseWebService, 
+      IWebService<Country> countryWebService, IuserExtentions userExtentions) : base(leadService)
     {
       _leadService = leadService;
-      IEnumerable<User> users = userService.Get((int?) null);
-      IEnumerable<Country> countries = countryWebService.Get((int?) null);
-      IEnumerable<Course> courses = courseWebService.Get((int?) null);
-      ViewBag.Courses = courses;
-      ViewBag.Users = users;
-      ViewBag.Countries = countries;
+      _courseWebService = courseWebService;
+      _countryWebService = countryWebService;
+      _userExtentions = userExtentions;
+      //IEnumerable<User> users = userService.Get((int?) null);
+      //IEnumerable<Country> countries = countryWebService.Get((int?) null);
+      //IEnumerable<Course> courses = courseWebService.Get((int?) null);
+      //ViewBag.Courses = courses;
+      //ViewBag.Users = users;
+      //ViewBag.Countries = countries;
+    }
+
+    public override ActionResult Index()
+    {
+      ViewBag.Countries = _countryWebService.Get((int?) null);
+      return base.Index();
     }
 
     //
@@ -28,20 +43,30 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /Leads/Details/5
 
-    public ActionResult Details(string id)
+    public override ActionResult Details(string id)
     {
       Lead lead = _leadService.Get(id);
-      //ViewBag.ReferredBy = _userService.Get(lead.ReferredBy);
+      ViewBag.Details = _userExtentions.GetUserDetails(new List<string> {lead.AssignedTo, lead.ReferredBy});
+      ViewBag.Country = _countryWebService.Get(lead.Country);
+      ViewBag.Courses = (from c in lead.Courses select _courseWebService.Get(c.CourseId)).ToList();
       return View("Details", lead);
     }
 
     //
     // GET: /Leads/Create
 
-    public ActionResult Create()
+    public override ActionResult Create()
     {
       Lead lead = new Lead();
+      SetupCreateEdit();
       return View("Create", lead);
+    }
+
+    private void SetupCreateEdit()
+    {
+      ViewBag.Details = _userExtentions.GetUserDetails();
+      ViewBag.Countries = _countryWebService.Get((int?) null);
+      ViewBag.Courses = _courseWebService.Get((int?) null);
     }
 
     //
@@ -63,9 +88,10 @@ namespace TMS.Web.UI.Controllers
     //
     // GET: /Leads/Edit/5
 
-    public ActionResult Edit(string id)
+    public override ActionResult Edit(string id)
     {
       Lead lead = _leadService.Get(id);
+      SetupCreateEdit();
       return View("Edit", lead);
     }
 

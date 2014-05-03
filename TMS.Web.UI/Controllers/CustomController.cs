@@ -1,4 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using TMS.Entities;
 using TMS.Entities.Enum;
 using TMS.Web.UI.Service;
@@ -7,12 +11,18 @@ namespace TMS.Web.UI.Controllers
 {
   public abstract class CustomController<T> : Controller where T : BaseEntity
   {
+    private readonly IuserExtentions _userExtentions;
     private readonly IWebService<T> _tService;
 
     protected CustomController(IWebService<T> tService)
     {
       ViewBag.ControllerName = GetControllerName();
       _tService = tService;
+    }
+
+    protected CustomController(IWebService<T> tService, IuserExtentions userExtentions) : this(tService)
+    {
+      _userExtentions = userExtentions;
     }
 
     private static string GetControllerName()
@@ -25,9 +35,18 @@ namespace TMS.Web.UI.Controllers
       return string.Format("{0}s", GetControllerName());
     }
 
+    public abstract ActionResult Details(string id);
+    public abstract ActionResult Create();
+    public abstract ActionResult Edit(string id);
+
     public virtual ActionResult Index()
     {
-      ViewData[GetName()] = _tService.Get((int?) null);
+      IEnumerable<T> enumerable = _tService.Get((int?) null);
+      if (_userExtentions != null)
+      {
+        ViewBag.Details = _userExtentions.GetUserDetails(enumerable as IEnumerable<User>);
+      }
+      ViewData[GetName()] = enumerable;
       return View();
     }
 

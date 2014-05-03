@@ -26,9 +26,9 @@
           <td>@Html.PascalCaseToPrettyString(@Model.Experience) years</td>
           <td class="text-right"><strong>Referred By:</strong></td>
           <td>
-            @if (ViewBag.Users != null)
+            @if (ViewBag.Details != null)
                     {
-                    @ViewBag.User.Name;
+                    @ViewBag.Details.Name;
                     }
           </td>
         </tr>

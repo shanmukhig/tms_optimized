@@ -1,4 +1,5 @@
-﻿@using TMS.Entities
+﻿@using System.Dynamic
+@using TMS.Entities
 @using TMS.Web.UI.Helpers
 @model Lead
 
@@ -26,14 +27,14 @@
           <td>@Html.PascalCaseToPrettyString(@Model.LeadSource)</td>
           <td class="text-right"><strong>Referred By:</strong></td>
           <td>
-            @*@{
-                        List<User> users = ViewBag.Users;
-                        User referredBy = users.SingleOrDefault(x => @Model.ReferredBy == x.Id);
-                        if (referredBy != null)
-                        {
-                      @referredBy.Name;
-                        }
-              }*@
+            @{
+              List<dynamic> details = ViewBag.Details as List<dynamic>;
+              var detail = details.SingleOrDefault(x => x.Id == Model.ReferredBy);
+              if (detail != null)
+              {
+                @detail.Name
+              }
+            }
           </td>
         </tr>
         <tr>
@@ -41,10 +42,7 @@
           <td>@Model.City</td>
           <td class="text-right"><strong>Country:</strong></td>
           <td>
-            @{
-              Country country = (ViewBag.Countries as IEnumerable<Country>).Single(x => x.Code.Equals(@Model.Country, StringComparison.InvariantCultureIgnoreCase));
-            }
-            @country.Name.TitleCase()
+            @ViewBag.Country.Name
           </td>
         </tr>
         <tr>
@@ -58,13 +56,14 @@
           <td><i class="glyphicon glyphicon-calendar"></i> @Model.ExpectedDateOfJoin.FormatDateTime()</td>
           <td class="text-right"><strong>Assigned To:</strong></td>
           <td>
-            @*@{
-              User user = users.SingleOrDefault(x => x.Id == @Model.AssignedTo);
-              if (user != null)
+            @{
+              details = ViewBag.Details as List<dynamic>;
+              detail = details.SingleOrDefault(x => x.Id == Model.AssignedTo);
+              if (detail != null)
               {
-                @user.Name
+                @detail.Name
               }
-            }*@
+            }
           </td>
         </tr>
         <tr>
@@ -82,84 +81,84 @@
     <ul class="list-group">
       <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-phone fa-fw fa-lg"></i>@Html.LabelForPascal(lead => lead.CommunicationDetails):<i class="fa fa-chevron-down pull-right"></i></li>
       @if (Model.CommunicationDetails != null && Model.CommunicationDetails.Any())
+      {
+        <li class="list-group-item">
+          <table class="table">
+            <thead>
+              <tr>
+                <td class="text-right"><strong>Is Preferred?</strong>
+                <td><strong>Comm. Type</strong></td>
+                <td><strong>ID</strong></td>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (CommunicationDetail communicationDetail in Model.CommunicationDetails)
               {
-      <li class="list-group-item">
-        <table class="table">
-          <thead>
-            <tr>
-              <td class="text-right"><strong>Is Preferred?</strong>
-              <td><strong>Comm. Type</strong></td>
-              <td><strong>ID</strong></td>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach (CommunicationDetail communicationDetail in Model.CommunicationDetails)
-                      {
-                    <tr>
-                      <td class="text-right col-md-3">
-                        @if (communicationDetail.IsPreferred)
-                            {
-                          <i class="fa fa-check-square fa-lg"></i>
-                            }
-                      </td>
-                      <td class="col-md-3">
-                        @switch (communicationDetail.CommunicationType)
-                            {
-                              case CommunicationType.Email:
-                          <i id="brandicon" class="fa fa-envelope fa-lg"></i>
-                                break;
-                              case CommunicationType.Phone:
-                          <i id="brandicon" class="fa fa-phone-square fa-lg"></i>
-                                break;
-                              case CommunicationType.Mobile:
-                          <i id="brandicon" class="fa fa-mobile fa-lg"></i>
-                                break;
-                              case CommunicationType.Skype:
-                          <i id="brandicon" class="fa fa-skype fa-lg"></i>
-                                break;
-                              case CommunicationType.Twitter:
-                          <i id="brandicon" class="fa fa-twitter-square fa-lg"></i>
-                                break;
-                              case CommunicationType.Facebook:
-                          <i id="brandicon" class="fa fa-facebook-square fa-lg"></i>
-                                break;
-                              case CommunicationType.LinkedIn:
-                          <i id="brandicon" class="fa fa-linkedin-square fa-lg"></i>
-                                break;
-                              case CommunicationType.Fax:
-                          <i id="brandicon" class="fa fa-print fa-lg"></i>
-                                break;
-                              default:
-                          <i id="brandicon" class="fa fa-question fa-lg"></i>
-                                break;
-                            }
-                      </td>
-                      <td class="col-md-6">@communicationDetail.Uri</td>
-                    </tr>
-                      }
-            <tr><td colspan="3"></td></tr>
-          </tbody>
-        </table>
-      </li>
+                <tr>
+                  <td class="text-right col-md-3">
+                    @if (communicationDetail.IsPreferred)
+                    {
+                      <i class="fa fa-check-square fa-lg"></i>
+                    }
+                  </td>
+                  <td class="col-md-3">
+                    @switch (communicationDetail.CommunicationType)
+                    {
+                      case CommunicationType.Email:
+                        <i id="brandicon" class="fa fa-envelope fa-lg"></i>
+                        break;
+                      case CommunicationType.Phone:
+                      <i id="brandicon" class="fa fa-phone-square fa-lg"></i>
+                        break;
+                      case CommunicationType.Mobile:
+                      <i id="brandicon" class="fa fa-mobile fa-lg"></i>
+                        break;
+                      case CommunicationType.Skype:
+                      <i id="brandicon" class="fa fa-skype fa-lg"></i>
+                        break;
+                      case CommunicationType.Twitter:
+                      <i id="brandicon" class="fa fa-twitter-square fa-lg"></i>
+                        break;
+                      case CommunicationType.Facebook:
+                      <i id="brandicon" class="fa fa-facebook-square fa-lg"></i>
+                        break;
+                      case CommunicationType.LinkedIn:
+                      <i id="brandicon" class="fa fa-linkedin-square fa-lg"></i>
+                        break;
+                      case CommunicationType.Fax:
+                      <i id="brandicon" class="fa fa-print fa-lg"></i>
+                        break;
+                      default:
+                      <i id="brandicon" class="fa fa-question fa-lg"></i>
+                        break;
+                    }
+                  </td>
+                  <td class="col-md-6">@communicationDetail.Uri</td>
+                </tr>
               }
+              <tr><td colspan="3"></td></tr>
+            </tbody>
+          </table>
+        </li>
+      }
     </ul>
   </div>
   <div class="col-md-6">
     <ul class="list-group">
       <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-clock-o fa-fw fa-lg"></i>@Html.LabelForPascal(lead => lead.BestTimeToContact)<i class="fa fa-chevron-down pull-right"></i></li>
       @if (Model.BestTimeToContact != null && @Model.BestTimeToContact.Any())
-              {
-      <li class="list-group-item">
-        <table class="table">
-          @foreach (DateTime? dateTime in Model.BestTimeToContact)
-                    {
-                  <tr>
-                    <td><i class="fa fa-clock-o fa-lg fa-fw"></i>@dateTime.FormatDateTime()</td>
-                  </tr>
-                    }
-        </table>
-      </li>
-              }
+      {
+        <li class="list-group-item">
+          <table class="table">
+            @foreach (DateTime? dateTime in Model.BestTimeToContact)
+            {
+              <tr>
+                <td><i class="fa fa-clock-o fa-lg fa-fw"></i>@dateTime.FormatDateTime()</td>
+              </tr>
+            }
+          </table>
+        </li>
+      }
     </ul>
   </div>
 </div>

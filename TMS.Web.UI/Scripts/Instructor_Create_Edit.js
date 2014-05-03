@@ -87,6 +87,21 @@ $('body').delegate('#certificationDetailSave', 'click', function () {
   }
 });
 
+$('body').delegate('#paymentsMadeSave', 'click', function () {
+  if (validateCustom()) {
+    var c = $('#PaymentMadeBy').find('option:selected');
+    var format = String.format('<tr><td class="col-md-3"><input type="hidden" value="{4}">{0}</td><td class="col-md-3">{1}</td><td class="col-md-2">{2}</td><td class="col-md-2">{3}</td><td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td></tr>', $('#Amount').val(), $('#MadeOn').val(), c.text(), $('#PaymentType').val(), c.val());
+    $('#paymentsMade > tbody').append(format);
+    $('#paymentsMadeSave').closest('div.modal').modal('hide');
+
+    Messenger().post({
+      message: 'Course detail added successfully.',
+      type: 'success',
+      showCloseButton: true
+    });
+  }
+});
+
 $('i.fa-minus-circle').click(function() {
   $('#Rating').find('i.fa-star-half-empty, i.fa-star, i.fa-star-o').each(function () { reSetStars($(this)); });
 });

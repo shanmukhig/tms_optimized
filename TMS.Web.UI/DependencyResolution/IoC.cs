@@ -8,6 +8,7 @@ namespace TMS.Web.UI.DependencyResolution {
                   expression =>
                   {
                     expression.For(typeof(IWebService<>)).HybridHttpOrThreadLocalScoped().Use(typeof(WebService<>));
+                    expression.For<IuserExtentions>().HybridHttpOrThreadLocalScoped().Use<UserExtentions>();
                   });
         }
     }
