@@ -28,14 +28,14 @@ $('#saveActivity').click(function () {
       data: JSON.stringify(activity),
       success: function(data) {
         Messenger().post({
-          message: String.format('Lead {0} successfully.', isCreate() ? 'created' : 'Updated'),
+          message: String.format('Activity {0} successfully.', isCreate() ? 'created' : 'Updated'),
           type: 'success',
           showCloseButton: true
         });
       },
       failure: function(result) {
         Messenger().post({
-          message: String.format('Failed to {0} Lead. Error: {1}', isCreate() ? 'create' : 'Update', result),
+          message: String.format('Failed to {0} Activity. Error: {1}', isCreate() ? 'create' : 'Update', result),
           type: 'success',
           showCloseButton: true
         });

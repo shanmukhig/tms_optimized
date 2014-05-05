@@ -28,7 +28,7 @@
       </tr>
       <tr>
         <td class="col-md-2 text-right"><strong>@Html.LabelFor(course => course.Status):</strong></td>
-        <td class="col-md-4">@Model.Status</td>
+        <td class="col-md-4">@Html.PascalCaseToPrettyString(@Model.Status)</td>
         <td colspan="2"></td>
       </tr>
     </table>
@@ -40,66 +40,66 @@
     @if (@Model.Instructors != null && @Model.Instructors.Any())
             {
               List<Instructor> instructors = ViewBag.Instructors;
-            <table class="table">
-              @foreach (Instructor i in @Model.Instructors.Select(instructor => instructors.Single(x => x.Id == instructor)))
+      <table class="table">
+        @foreach (Instructor i in @Model.Instructors.Select(instructor => instructors.Single(x => x.Id == instructor)))
                 {
-                <tr>
-                  <td class="col-md-2 text-right" style="border-top: none"><strong>Name: </strong></td>
-                  <td class="col-md-4" style="border-top: none">@i.Salutation, @i.LastName @i.FirstName</td>
-                  <td class="col-md-2 text-right" style="border-top: none"><strong>Experience:</strong></td>
-                  <td style="border-top: none">@i.Experience @i.Experience > 1 ? "year":"years" </td>
-                </tr>
+          <tr>
+            <td class="col-md-2 text-right" style="border-top: none"><strong>Name: </strong></td>
+            <td class="col-md-4" style="border-top: none">@i.Salutation, @i.LastName @i.FirstName</td>
+            <td class="col-md-2 text-right" style="border-top: none"><strong>Experience:</strong></td>
+            <td style="border-top: none">@i.Experience.Pluralise("year")</td>
+              </tr>
                 <tr>
                   <td colspan="4">@i.Description</td>
                 </tr>
                 }
             </table>
             }
-  </li>
-</ul>
-<ul class="list-group">
-  <li class="list-group-item  list-group-item-text list-group-item-info"><i class="fa fa-list-alt fa-fw fa-lg"></i><strong>Topic Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
-  <li class="list-group-item">
-    <div class="table-responsive">
-      <table class="table table-condensed">
-        <tbody>
-          <tr>
-            <td class="col-md-8" style="border-top:none;"><strong>Title</strong></td>
-            <td class="col-md-4" style="border-top:none;"><strong>Duration</strong></td>
-          </tr>
-          @if (@Model.CourseTopics != null && Model.CourseTopics.Any())
+      </li>
+    </ul>
+    <ul class="list-group">
+      <li class="list-group-item  list-group-item-text list-group-item-info"><i class="fa fa-list-alt fa-fw fa-lg"></i><strong>Topic Details</strong><i class="fa fa-chevron-down pull-right"></i></li>
+      <li class="list-group-item">
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <td class="col-md-8" style="border-top:none;"><strong>Title</strong></td>
+                <td class="col-md-4" style="border-top:none;"><strong>Duration</strong></td>
+              </tr>
+              @if (@Model.CourseTopics != null && Model.CourseTopics.Any())
                   {
                   foreach (CourseTopic courseTopic in Model.CourseTopics.OrderBy(topic => topic.SequenceId))
                   {
-                  <tr>
-                    <td><span><i class="fa fa-plus-square fa-fw" style="cursor: pointer"></i></span>  @courseTopic.Title</td>
-                    <td>@courseTopic.Duration.ConvertToString("hour")</td>
-                  </tr>
+                    <tr>
+                      <td><span><i class="fa fa-plus-square fa-fw" style="cursor: pointer"></i></span>  @courseTopic.Title</td>
+                      <td>@courseTopic.Duration.ConvertToString("hour")</td>
+                    </tr>
                   if (courseTopic.CourseTopics != null && courseTopic.CourseTopics.Any())
                   {
-                  <tr style="display: none">
-                    <td colspan="2" style="border-top:none;">
-                      <div class="table-responsive">
-                        <table class="table table-hover table-condensed" id="@courseTopic.SequenceId">
-                          <tbody>
-                            @foreach (CourseTopic ct in courseTopic.CourseTopics.OrderBy(topic => topic.SequenceId))
+                    <tr style="display: none">
+                      <td colspan="2" style="border-top:none;">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-condensed" id="@courseTopic.SequenceId">
+                            <tbody>
+                              @foreach (CourseTopic ct in courseTopic.CourseTopics.OrderBy(topic => topic.SequenceId))
                             {
-                            <tr>
-                              <td class="col-md-1"></td>
-                              <td class="col-md-7"><span><i class="fa fa-hand-o-right fa-fw" style="cursor: pointer"></i></span>  @ct.Title</td>
-                              <td class="col-md-8">@ct.Duration minutes</td>
-                            </tr>
+                                <tr>
+                                  <td class="col-md-1"></td>
+                                  <td class="col-md-7"><span><i class="fa fa-hand-o-right fa-fw" style="cursor: pointer"></i></span>  @ct.Title</td>
+                                  <td class="col-md-8">@ct.Duration minutes</td>
+                                </tr>
                             }
-                          </tbody>
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
                   }
                   }
                   }
-        </tbody>
-      </table>
-    </div>
-  </li>
-</ul>
+            </tbody>
+          </table>
+        </div>
+      </li>
+    </ul>

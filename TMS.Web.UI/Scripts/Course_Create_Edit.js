@@ -30,7 +30,6 @@ $('body').delegate('span i.fa-times', 'click', function () {
 
 $('body').delegate('span i.glyphicon-remove', 'click', function() {
   var id = $(this).parents().eq(4).attr('id');
-  alert(id);
   setTimeout(function() {
     $(String.format('#{0}', id)).parent().parent().parent('tr').prev().find('td:eq(1)').html(getMinutes($(String.format('#{0} > tbody > tr:gt(0)', id)).find('td:eq(2)').sumHTML()));
     $('#Duration').val(getMinutes($('#coursesAdded > tbody').find('table').parent().parent().parent().prev().find('td:eq(1)').sumHTML1()));
@@ -76,8 +75,51 @@ $('body').delegate('#AddInstructor', 'click', function() {
   }
 });
 
-$('#saveCourse').click(function() {
+$('#saveCourse').click(function () {
   if (validateCourse()) {
-    
+    var course = {
+      Title: $('#Title').val(),
+      Price: $('#Price').val(),
+      Description: $('#Description').val(),
+      Status: $('#Status').find('option:selected').val(),
+      Instructors: $.map($('#Instructor > tbody > tr:gt(1)'), function(i) { return $(i).find('input:hidden').val(); }),
+      CourseTopics: $.map($('#coursesAdded > tbody > tr:gt(1)').find('span i.fa-minus-square, i.fa-plus-square').closest('tr'), function(i) {
+        return {
+          Title: $(i).find('td:eq(0)').html().replace('<span><i class="fa fa-fw fa-minus-square" style="cursor: pointer"></i></span>', '').replace('<span><i class="fa fa-plus-square fa-fw" style="cursor: pointer"></i></span>', ''),
+          CourseTopics: $.map($(i).next('tr').children().find('table > tbody > tr:gt(0)'), function(j) {
+            var tds = $(j).find('td');
+            return { Title: $.trim($(tds[1]).html().replace('<span><i class="fa fa-hand-o-right fa-fw" style="cursor: pointer"></i></span>', '')), Duration: $(tds[2]).html().split(' ')[0] }
+          })
+        };
+      })
+    };
+    if (!isCreate())
+      course.Id = $('#courseForm').attr('uid');
+
+    $.ajax({
+      type: 'POST',
+      contentType: 'application/json',
+      url: $('#courseForm').attr('action'),
+      data: JSON.stringify(course),
+      success: function(data) {
+        Messenger().post({
+          message: String.format('Course {0} successfully.', isCreate() ? 'created' : 'Updated'),
+          type: 'success',
+          showCloseButton: true
+        });
+      },
+      failure: function(result) {
+        Messenger().post({
+          message: String.format('Failed to {0} Course. Error: {1}', isCreate() ? 'create' : 'Update', result),
+          type: 'success',
+          showCloseButton: true
+        });
+      }
+    });
   }
 });
+
+function isCreate() {
+  var i = $('#courseForm').attr('uid');
+  return i == undefined || i == '';
+}

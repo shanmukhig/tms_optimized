@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using TMS.Entities;
 
 namespace TMS.Web.UI.Helpers
 {
@@ -50,34 +52,57 @@ namespace TMS.Web.UI.Helpers
       return value.HasValue ? Regex.Replace(string.Format("{0:C}", value), "[^0-9,\\.]", string.Empty) : string.Empty;
     }
 
+    public static string Pluralise(this float? t, string s)
+    {
+      if (t.HasValue && t.Value > 0)
+        return string.Format("{0} {1}{2}", t.Value, s, t.Value > 1 ? "s" : string.Empty);
+      return string.Empty;
+    }
+
     public static string ConvertToString(this int? t, string s)
     {
-      return NumberToHours(t);
-      //if (t.HasValue && t.Value > 0)
-      //  return string.Format("{0} {1}{2}", t.Value, s, t.Value > 1 ? "s" : string.Empty);
-      //return string.Empty;
+      if (!t.HasValue || t.Value <= default(int)) return string.Empty;
+      TimeSpan ts = TimeSpan.FromMinutes(t.Value);
+      return string.Format("{0} hours {1} minutes", ts.Hours, ts.Minutes);
     }
 
-    private static int? ConvertoString(this int? t, string m, int f, StringBuilder sb)
+    public static IEnumerable<T> DistinctList<T>(this IEnumerable<T> source) where T: BaseEntity
     {
-      if (t >= f)
+      List<T> uniques = new List<T>();
+      foreach (T item in source)
       {
-        var a = t / f;
-        t = t % f;
-        sb.AppendFormat("{0} {2}{1} ", a, a > 1 ? "s" : string.Empty, m);
+        if (uniques.All(x => x.Id != item.Id))
+          uniques.Add(item);
       }
-      else
-        sb.AppendFormat("{0} {2}{1} ", t, t > 1 ? "s" : string.Empty, m);
-      return t;
+      return uniques;
     }
 
-    public static string NumberToHours(this int? hours)
-    {
-      StringBuilder sb = new StringBuilder();
-      hours.ConvertoString("hour", 60, sb)
-        .ConvertoString("minute", 60, sb);
-      return sb.ToString();
-    }
+    //private static int? ConvertoString(this int? t, string m, int f, StringBuilder sb)
+    //{
+    //  if (t >= f)
+    //  {
+    //    var a = t/f;
+    //    t = t%f;
+    //    sb.AppendFormat("{0} {2}{1} ", a, a > 1 ? "s" : string.Empty, m);
+    //  }
+    //  else
+    //  {
+    //    //sb.AppendFormat("{0} {2}{1} ", t, t > 1 ? "s" : string.Empty, m);
+    //    t = t%f;
+    //  }
+        
+    //  return t;
+    //}
+
+    //public static string NumberToHours(this int? hours)
+    //{
+    //  if (!hours.HasValue)
+    //    return string.Empty;
+    //  StringBuilder sb = new StringBuilder();
+    //  hours.ConvertoString("hour", 60, sb)
+    //    .ConvertoString("minute", 60, sb);
+    //  return sb.ToString();
+    //}
 
     public static string NumberToDays(this int days)
     {

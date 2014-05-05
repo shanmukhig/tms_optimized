@@ -29,16 +29,21 @@ namespace TMS.Web.UI.Controllers
     public override ActionResult Details(string id)
     {
       Instructor instructor = _instructorWebService.Get(id);
+      
       if (!string.IsNullOrWhiteSpace(instructor.Country))
         ViewBag.Country = _countryWebService.Get(instructor.Country);
-      if (!string.IsNullOrWhiteSpace(instructor.ReferredBy))
-        ViewBag.Details = _userExtentions.GetUserDetails(instructor.ReferredBy);
-      if (instructor.Courses != null && instructor.Courses.Any())
-      {
-        List<Course> courses = new List<Course>();
-        instructor.Courses.ForEach(x => courses.Add(_courseWebService.Get(x.CourseId)));
-        ViewBag.Courses = courses;
-      }
+
+      List<string> userIds = new List<string>();
+      
+      if(!string.IsNullOrWhiteSpace(instructor.ReferredBy))
+        userIds.Add(instructor.ReferredBy);
+      
+      if (instructor.Payments != null && instructor.Payments.Any())
+        instructor.Payments.ForEach(x => userIds.Add(x.PaymentMadeBy));
+
+      ViewBag.Details = _userExtentions.GetUserDetails(userIds);
+
+      SetupCourse(instructor);
       return View(instructor);
     }
 
@@ -57,33 +62,46 @@ namespace TMS.Web.UI.Controllers
       ViewBag.Details = _userExtentions.GetUserDetails();
     }
 
-    [HttpPost]
-    public override ActionResult Create(Instructor collection)
+    private void SetupCourse(Instructor instructor)
     {
-      try
+      if (instructor.Courses != null && instructor.Courses.Any())
       {
-        // TODO: Add insert logic here
-
-        return RedirectToAction("Index");
-      }
-      catch
-      {
-        return View();
+        List<Course> courses = new List<Course>();
+        foreach (CourseExperience courseExperience in instructor.Courses)
+        {
+          if (courses.Any(x => x.Id == courseExperience.CourseId))
+            continue;
+          courses.Add(_courseWebService.Get(courseExperience.CourseId));
+        }
+        ViewBag.Courses = courses;
       }
     }
 
     [HttpPost]
-    public override ActionResult Edit(Instructor collection)
+    public override ActionResult Create(Instructor instructor)
     {
       try
       {
-        // TODO: Add insert logic here
-
-        return RedirectToAction("Index");
+        _instructorWebService.Create(instructor);
+        return null;
       }
       catch
       {
-        return View();
+        return View("Create", instructor);
+      }
+    }
+
+    [HttpPost]
+    public override ActionResult Edit(Instructor instructor)
+    {
+      try
+      {
+        _instructorWebService.Update(instructor);
+        return null;
+      }
+      catch
+      {
+        return View("Edit", instructor);
       }
     }
 
@@ -94,13 +112,7 @@ namespace TMS.Web.UI.Controllers
     {
       Instructor instructor = _instructorWebService.Get(id);
       SetupCreateEdit();
-      if (instructor.Courses != null && instructor.Courses.Any())
-      {
-        List<Course> courses = new List<Course>();
-        instructor.Courses.ForEach(x => courses.Add(_courseWebService.Get(x.CourseId)));
-        ViewBag.Courses = courses;
-      }
-
+      SetupCourse(instructor);
       return View(instructor);
     }
 

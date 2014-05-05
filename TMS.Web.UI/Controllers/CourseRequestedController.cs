@@ -21,14 +21,16 @@ namespace TMS.Web.UI.Controllers
 
         public ActionResult Index()
         {
-          IEnumerable<SelectListItem> courses =
-            _courseWebService.Get((int?) null)
-              .Select(course => new SelectListItem
+          IEnumerable<Course> courses = _courseWebService.Get((int?) null);
+
+          if (courses != null)
+          {
+            ViewBag.Courses = courses.Select(course => new SelectListItem
                   {
                     Value = course.Id,
                     Text = string.Format("Title: {0}, Duration: {1} days, Price: ${2}", course.Title, course.Duration, course.Price.ToCurrencyString())
                   });
-          ViewBag.Courses = courses;
+          }
           return View();
         }
 

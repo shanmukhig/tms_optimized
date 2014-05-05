@@ -45,7 +45,8 @@ $('body').delegate('#certificationDetailSave', 'click', function () {
 $('body').delegate('#paymentsMadeSave', 'click', function () {
   if (validateCustom()) {
     var c = $('#PaymentMadeBy').find('option:selected');
-    var format = String.format('<tr><td class="col-md-3"><input type="hidden" value="{4}">{0}</td><td class="col-md-3">{1}</td><td class="col-md-2">{2}</td><td class="col-md-2">{3}</td><td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td></tr>', $('#Amount').val(), $('#MadeOn').val(), c.text(), $('#PaymentType').val(), c.val());
+    var p = $('#PaymentType').find('option:selected');
+    var format = String.format('<tr><td class="col-md-3"><input type="hidden" value="{4}">{0}</td><td class="col-md-3">{1}</td><td class="col-md-2">{2}</td><td class="col-md-2">{3}</td><td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td></tr>', $('#Amount').val(), $('#MadeOn').val(), p.text(), c.text(), String.format('{0},{1}', c.val(), p.val()));
     $('#paymentsMade > tbody').append(format);
     $('#paymentsMadeSave').closest('div.modal').modal('hide');
 
@@ -89,55 +90,60 @@ function reSetStars(e) {
 
 $('#saveInstructor').click(function () {
   if (validateInstructor()) {
-    /*var lead = {
+    var instructor = {
       Salutation: $('#Salutation').val(),
       FirstName: $('#FirstName').val(),
       LastName: $('#LastName').val(),
-      LeadType: $('#LeadType').val(),
-      LeadSource: $('#LeadSource').val(),
+      Experience: $('#Experience').val(),
+      InstructorType: $('#InstructorType').val(),
+      ReferredBy: $('#ReferredBy').val(),
       City: $('#City').val(),
       Country: $('#Country').val(),
-      ReferredBy: $('#ReferredBy').val(),
-      ClientStatus: $('#ClientStatus').val(),
-      AssignedTo: $('#AssignedTo').val(),
-      ExpectedDateOfJoin: new moment($('#ExpectedDateOfJoin').val(), 'dddd MMMM, DD YYYY'),
-      DemoDateTime: new moment($('#DemoDateTime').val(), 'dddd MMMM, DD YYYY HH:mm'),
+      DateofJoin: $('#DateofJoin').val(),
+      DateOfResignation: $('#DateOfResignation').val(),
+      Description: $('#Description').val(),
+      Status: $('#Status').val(),
+      Rating: $('i.fa-star').length + $('i.fa-star-half-empty').length / 2,
       CommunicationDetails : $.map($("#communicationDetail tr:gt(1)"), function(i) { var tds = $(i).children('td');
         return {CommunicationType:getCommType(tds[1]),Uri:$(tds[2]).html(),IsPreferred:$(tds[0]).html().indexOf('fa-check-square') > -1 ? true : false};
       }),
-      BestTimeToContact: $.map($("#bestTimetoContact tr:gt(0)").find('td i.fa-clock-o'), function(i){ return new moment($(i).closest('td').html().replace('<i class="fa fa-clock-o fa-lg fa-fw"></i>', ''), 'dddd MMMM, DD YYYY HH:mm'); }),
-      Courses: $.map($("#courseRequired tr:gt(1)").find('input'), function(i) { var a = $(i).val().split(','); return { CourseId: a[0], AmountQuoted: a[2], ServiceRequired: a[1] }; }),
-      Description: $('#Description').val(),
-      Status: $('#Status').val(),
+      Certifications:$.map($("#certifications tr:gt(1)"), function(i) { var tds = $(i).children('td');
+        return {Title:$(tds[0]).html(),CertifyingCompany:$(tds[1]).html(),CertifiedDate:new moment($(tds[2]).html(), 'dddd MMMM, DD YYYY'), ValidThru: new moment($(tds[3]).html(), 'dddd MMMM, DD YYYY'), Score:$(tds[4]).html()};
+      }),
+      Courses: $.map($('#courseDetail tr:gt(1)'), function (i) { var tds = $(i).children('td'); return { CourseId: $(tds[0]).find('input:hidden').val(), RelevantExperience: $(tds[1]).html().split(' ')[0] }; }),
+      Payments: $.map($("#paymentsMade tr:gt(1)"), function (i) {
+        var tds = $(i).children('td'); var x = $(tds[0]).find('input:hidden').val().split(',');
+        return { Amount: $(tds[0]).html().split('>')[1], MadeOn: new moment($(tds[1]).html(), 'dddd MMMM, DD YYYY'), PaymentType: x[1], PaymentMadeBy: x[0] };
+      }),
     };
     if (!isCreate())
-      lead.Id = $('#leadCreateForm').attr('leadId');
+      instructor.Id = $('#instructorForm').attr('uid');
 
     $.ajax({
       type: 'POST',
       contentType: 'application/json',
-      url: $('#leadCreateForm').attr('action'),
-      data: JSON.stringify(lead),
+      url: $('#instructorForm').attr('action'),
+      data: JSON.stringify(instructor),
       success: function(data) {
         Messenger().post({
-          message: String.format('Lead {0} successfully.', isCreate() ? 'created' : 'Updated'),
+          message: String.format('Instructor {0} successfully.', isCreate() ? 'created' : 'Updated'),
           type: 'success',
           showCloseButton: true
         });
       },
       failure: function(result) {
         Messenger().post({
-          message: String.format('Failed to {0} Lead. Error: {1}', isCreate() ? 'create' : 'Update', result),
+          message: String.format('Failed to {0} Instructor. Error: {1}', isCreate() ? 'create' : 'Update', result),
           type: 'success',
           showCloseButton: true
         });
       }
-    });*/
+    });
   }
 });
 
 function isCreate() {
-  var i = $('#instructorCreateForm').attr('instructorId');
+  var i = $('#instructorForm').attr('uid');
   return i == undefined || i == '';
 }
 

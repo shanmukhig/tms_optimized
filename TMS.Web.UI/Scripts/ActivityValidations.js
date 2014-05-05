@@ -1,6 +1,6 @@
 ﻿function validateActivity() {
   var i = true;
-  i = i & validateDD('#AssignedTo', 'Assigned to required.', 'left');
+  //i = i & validateDD('#AssignedTo', 'Assigned to required.', 'left');
   i = i & validateInput('#DueBy', 'Due by required.', '', 'left');
   i = i & validateDD('#Priority', 'Priority required.', 'left');
   i = i & validateDD('#ActivityStatus', 'Activity Status required.', 'left');

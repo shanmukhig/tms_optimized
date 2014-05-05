@@ -26,10 +26,14 @@
           <td>@Html.PascalCaseToPrettyString(@Model.Experience) years</td>
           <td class="text-right"><strong>Referred By:</strong></td>
           <td>
-            @if (ViewBag.Details != null)
-                    {
-                    @ViewBag.Details.Name;
-                    }
+            @{
+              IEnumerable<dynamic> details = ViewBag.Details;
+              var detail = details.SingleOrDefault(x => x.Id == Model.ReferredBy);
+              if (detail != null)
+              {
+                @detail.Name
+              }
+            }
           </td>
         </tr>
         <tr>
@@ -38,30 +42,30 @@
           <td class="text-right"><strong>Country:</strong></td>
           <td>
             @if (ViewBag.Country != null)
-                    {
-                    @ViewBag.Country.Name
-                    }
+            {
+              @ViewBag.Country.Name
+            }
           </td>
         </tr>
         <tr>
           <td class="text-right"><strong>Date of Join:</strong></td>
           <td>
             @{
-                      if (Model.DateofJoin.HasValue)
-                      {
-                    <i class="glyphicon glyphicon-calendar"></i>
-                      }
-                    @Model.DateofJoin.FormatDateTime()
+              if (Model.DateofJoin.HasValue)
+              {
+                <i class="glyphicon glyphicon-calendar"></i>
+              }
+              @Model.DateofJoin.FormatDateTime()
             }
           </td>
           <td class="text-right"><strong>Date of Resignation:</strong></td>
           <td>
             @{
-                      if (Model.DateOfResignation.HasValue)
-                      {
-                    <i class="glyphicon glyphicon-calendar"></i>
-                      }
-                    @Model.DateOfResignation.FormatDateTime()
+              if (Model.DateOfResignation.HasValue)
+              {
+                <i class="glyphicon glyphicon-calendar"></i>
+              }
+              @Model.DateOfResignation.FormatDateTime()
             }
           </td>
         </tr>
@@ -69,35 +73,37 @@
           <td class="text-right"><strong>Rating:</strong></td>
           <td>
             @if (Model.Rating.HasValue)
-                    {
-                      var s = Model.Rating.Value.ToString().Split('.');
-                      for (int i = 0; i < int.Parse(s[0]); i++)
-                      {
-                    <i class="fa fa-star fa-lg"></i>
-                      }
-
-                      float k = float.Parse('.' + s[1]);
-                      if (k <= .25f)
-                      {
-                    <i class="fa fa-star-o fa-lg"></i>
-                      }
-                      else if (k > .25f && k <= .75f)
-                      {
-                    <i class="fa fa-star-half-empty fa-lg"></i>
-                      }
-                      else
-                      {
-                    <i class="fa fa-star fa-lg"></i>
-                      }
-                      for (int i = 0; i < 5 - Math.Ceiling(Model.Rating.Value); i++)
-                      {
-                    <i class="fa fa-star-o fa-lg"></i>
-                      }
-                    }
-                    else
-                    {
-                    <i class="fa fa-star-o fa-lg"></i>
-                    }
+            {
+              var s = Model.Rating.Value.ToString().Split('.');
+              for (int i = 0; i < int.Parse(s[0]); i++)
+              {
+                <i class="fa fa-star fa-lg"></i>
+              }
+              if (s.Length > 1)
+              {
+                float k = float.Parse('.' + s[1]);
+                if (k <= .25f)
+                {
+                  <i class="fa fa-star-o fa-lg"></i>
+                }
+                else if (k > .25f && k <= .75f)
+                {
+                  <i class="fa fa-star-half-empty fa-lg"></i>
+                }
+                else
+                {
+                  <i class="fa fa-star fa-lg"></i>
+                }
+              }
+              for (int i = 0; i < 5 - Math.Ceiling(Model.Rating.Value); i++)
+              {
+                <i class="fa fa-star-o fa-lg"></i>
+              }
+            }
+            else
+            {
+              <i class="fa fa-star-o fa-lg"></i>
+            }
           </td>
           <td class="col-md-2 text-right"><strong>Description:</strong></td>
           <td>@Model.Description</td>
@@ -126,23 +132,23 @@
                 <strong>Title</strong>
               </td>
               <td class="col-md-6">
-                <strong>Relavent Experience</strong>
+                <strong>Relevant Experience</strong>
               </td>
             </tr>
           </thead>
           <tbody>
             @if (Model.Courses != null && Model.Courses.Any())
-                      {
-                        IEnumerable<Course> courses = ViewBag.Courses;
-                          foreach (CourseExperience id in Model.Courses)
-                          {
-                            var course = courses.Single(x => x.Id == id.CourseId);
-                    <tr>
-                      <td class="col-md-5">@course.Title</td>
-                      <td class="col-md-4">@id.RelevantExperience years</td>
-                    </tr>
-                          }
-                      }
+            {
+              IEnumerable<Course> courses = ViewBag.Courses;
+              foreach (CourseExperience id in Model.Courses)
+              {
+                var course = courses.SingleOrDefault(x => x.Id == id.CourseId);
+                <tr>
+                  <td class="col-md-5">@course.Title</td>
+                  <td class="col-md-4">@id.RelevantExperience years</td>
+                </tr>
+              }
+            }
             <tr><td colspan="3"></td></tr>
           </tbody>
         </table>
@@ -196,14 +202,20 @@
           </tr>
           @if (Model.Payments != null && @Model.Payments.Any())
           {
-            foreach (PaymentsMade paymentsMade  in Model.Payments)
+            foreach (PaymentsMade paymentsMade in Model.Payments)
             {
+              detail = details.SingleOrDefault(x => x.Id == paymentsMade.PaymentMadeBy);
               <tr>
                 <td class="col-md-3">@paymentsMade.Amount</td>
                 <td class="col-md-3">@paymentsMade.MadeOn.FormatDateTime(false)</td>
                 <td class="col-md-2">@Html.PascalCaseToPrettyString(paymentsMade.PaymentType)</td>
-                <td class="col-md-2">@paymentsMade.PaymentMadeBy</td>
-              </tr>
+                <td class="col-md-2">
+                  @if (detail != null)
+                  {
+                    @detail.Name
+                                     }
+              </td>
+            </tr>
             }
           }
           <tr><td colspan="5"></td></tr>

@@ -20,8 +20,8 @@ namespace TMS.API.Service.Controllers
     {
       IQueryable<T> ts = _domainService.Get(count);
 
-      if (ts == null || !ts.Any())
-        Error(HttpStatusCode.NoContent, "No {0}s found.");
+      //if (ts == null || !ts.Any())
+      //  Error(HttpStatusCode.NoContent, "No {0}s found.");
 
       return Request.CreateResponse(HttpStatusCode.OK, ts);
     }
@@ -31,8 +31,8 @@ namespace TMS.API.Service.Controllers
       if (string.IsNullOrWhiteSpace(searchString))
         return Get((int?)null);
       IQueryable<T> ts = _domainService.Get(searchString);
-      if (ts == null || !ts.Any())
-        Error(HttpStatusCode.NotFound, "No Course found for the given Id: {0}.", new object[] { searchString });
+      //if (ts == null || !ts.Any())
+      //  Error(HttpStatusCode.NotFound, "No Course found for the given Id: {0}.", new object[] { searchString });
 
       return Request.CreateResponse(HttpStatusCode.OK, ts);
     }

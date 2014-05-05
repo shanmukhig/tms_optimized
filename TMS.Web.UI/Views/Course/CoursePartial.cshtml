@@ -36,6 +36,11 @@
         <td class="col-md-2 text-right vert-align"><strong>Description:</strong></td>
         <td class="col-md-4">@Html.TextBoxFor(course => course.Description, new { @class = "form-control" })</td>
       </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(course => course.Status):</td>
+        <td class="col-md-4">@Html.EnumDropDownListFor(course => course.Status)</td>
+        <td colspan="2"></td>
+      </tr>
     </table>
   </li>
 </ul>
@@ -60,7 +65,7 @@
           {
             <tr>
               <td><input type="hidden" value="@i.Id">@i.Salutation, @i.LastName @i.FirstName</td>
-              <td>@i.Experience @i.Experience > 1 ? "year":"years" </td>
+              <td>@i.Experience.Pluralise("year")</td>
               <td colspan="4">@i.Description</td>
               <td><span class="btn btn-xs btn-danger btn-outline pull-right"><i class="glyphicon glyphicon-remove"></i></span></td>
             </tr>
