@@ -1,5 +1,10 @@
-﻿@model TMS.Entities.ActivityEntity
+﻿@model TMS.Entities.Activity
 
 @{
-  Layout = null;
+  ViewBag.Title = "Create Activity";
+  Layout = string.Empty;
+}
+
+@{
+  Html.RenderPartial("ActivityPartial");
 }

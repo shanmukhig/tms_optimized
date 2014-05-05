@@ -186,13 +186,23 @@
             }
           </li>
           <li class="list-group-item lisp">
-            @if (Request.RawUrl.Contains(target: "ActivityEntity"))
+            @if (Request.RawUrl.Contains(target: "Activity"))
             {
               <span data-uri="/tmsweb/activity"><i class="fa fa-bell fa-lg fa-fw"></i><strong> Activities</strong></span>
             }
             else
             {
               <span data-uri="/tmsweb/activity"><i class="fa fa-bell fa-lg fa-fw"></i> Activities</span>
+            }
+          </li>
+          <li class="list-group-item lisp">
+            @if (Request.RawUrl.Contains(target: "Contact"))
+            {
+              <span data-uri="/tmsweb/contact"><i class="fa fa-th-list fa-lg fa-fw"></i><strong> Contacts</strong></span>
+            }
+            else
+            {
+              <span data-uri="/tmsweb/contact"><i class="fa fa-th-list fa-lg fa-fw"></i> Contacts</span>
             }
           </li>
           <li class="list-group-item lisp">

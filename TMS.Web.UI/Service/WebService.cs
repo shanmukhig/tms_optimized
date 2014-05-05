@@ -55,6 +55,8 @@ namespace TMS.Web.UI.Service
     public IEnumerable<dynamic> GetUserDetails(IEnumerable<User> users)
     {
       List<dynamic> details = new List<dynamic>();
+      if (users == null|| !users.Any())
+        return details;
       foreach (User user in users.Where(x => !string.IsNullOrWhiteSpace(x.LinkedId)))
       {
         dynamic d;

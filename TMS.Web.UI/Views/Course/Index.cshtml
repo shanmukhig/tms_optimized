@@ -25,7 +25,7 @@
       foreach (Course course in ViewBag.Courses)
       {
         <tr>
-          <td style="text-align: center"><input type="checkbox" data="@course.Id" /></td>
+          <td style="text-align: center"><i class="fa fa-square-o fa-lg" data-value="@course.Id"></i></td>
           <td class="td" style="cursor: pointer;" onclick="location.href = '@Url.Action("Details", @ViewBag.ControllerName, new {id = course.Id})'">@course.Title</td>
           <td>
             @course.Description

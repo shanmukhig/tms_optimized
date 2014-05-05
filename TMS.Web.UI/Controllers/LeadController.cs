@@ -48,7 +48,7 @@ namespace TMS.Web.UI.Controllers
       Lead lead = _leadService.Get(id);
       ViewBag.Details = _userExtentions.GetUserDetails(new List<string> {lead.AssignedTo, lead.ReferredBy});
       ViewBag.Country = _countryWebService.Get(lead.Country);
-      ViewBag.Courses = (from c in lead.Courses select _courseWebService.Get(c.CourseId)).ToList();
+      SetupCourse(lead);
       return View("Details", lead);
     }
 
@@ -58,22 +58,34 @@ namespace TMS.Web.UI.Controllers
     public override ActionResult Create()
     {
       Lead lead = new Lead();
-      SetupCreateEdit();
+      SetupCreateEdit(lead);
       return View("Create", lead);
     }
 
-    private void SetupCreateEdit()
+    private void SetupCourse(Lead lead)
+    {
+      List<Course> courses = new List<Course>();
+      if (lead.Courses != null && lead.Courses.Any())
+      {
+        foreach (CourseRequested courseRequested in lead.Courses.Where(courseRequested => courses.All(x => x.Id != courseRequested.CourseId)))
+          courses.Add(_courseWebService.Get(courseRequested.CourseId));
+        ViewBag.Courses = courses;
+      }
+
+    }
+
+    private void SetupCreateEdit(Lead lead)
     {
       ViewBag.Details = _userExtentions.GetUserDetails();
       ViewBag.Countries = _countryWebService.Get((int?) null);
-      ViewBag.Courses = _courseWebService.Get((int?) null);
+      SetupCourse(lead);
     }
 
     //
     // POST: /Leads/Create
 
     [HttpPost]
-    public ActionResult CreateLead(Lead lead)
+    public override ActionResult Create(Lead lead)
     {
       try
       {
@@ -91,7 +103,7 @@ namespace TMS.Web.UI.Controllers
     public override ActionResult Edit(string id)
     {
       Lead lead = _leadService.Get(id);
-      SetupCreateEdit();
+      SetupCreateEdit(lead);
       return View("Edit", lead);
     }
 
@@ -99,7 +111,7 @@ namespace TMS.Web.UI.Controllers
     // POST: /Leads/Edit/5
 
     [HttpPost]
-    public ActionResult EditLead(Lead lead)
+    public override ActionResult Edit(Lead lead)
     {
       try
       {

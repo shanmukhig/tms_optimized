@@ -210,7 +210,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\Extentions.cs" />
     <Compile Include="Helpers\RenderView.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -263,6 +263,8 @@
     <Content Include="Scripts\Course_Create_Edit.js" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\Index.js" />
+    <Content Include="Scripts\ActivityValidations.js" />
+    <Content Include="Scripts\Activity_Create_Edit.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
@@ -270,8 +272,10 @@
     <Content Include="Scripts\jquery.validate.bootstrap.popover.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\InstructorValidations.js" />
+    <Content Include="Scripts\ContactValidations.js" />
     <Content Include="Scripts\LeadValidations.js" />
     <Content Include="Scripts\Instructor_Create_Edit.js" />
+    <Content Include="Scripts\Contact_Create_Edit.js" />
     <Content Include="Scripts\Lead_Create_Edit.js" />
     <Content Include="Scripts\Lead_Create_Edit_Validations.js" />
     <Content Include="Scripts\messenger\messenger-theme-flat.js" />
@@ -368,6 +372,10 @@
     <Content Include="Views\Contact\Edit.cshtml" />
     <Content Include="Views\Contact\Details.cshtml" />
     <Content Include="Views\Contact\Create.cshtml" />
+    <Content Include="Views\Shared\_CommunicationDetail.cshtml" />
+    <Content Include="Views\Shared\_CommunicationDetail_Edit.cshtml" />
+    <Content Include="Views\Contact\ContactPartial.cshtml" />
+    <Content Include="Views\Activity\ActivityPartial.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -83,6 +83,6 @@ function validatePreferred() {
 var intRegEx = /^(?=\d*[1-9])\d+$/;
 var numberRegEx = /^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$/;
 var stringRegEx = /^[a-z.,\s0-9\-_:]+$/i;
-var alphaNumericRegex = /^[0-9a-z.,\s]+$/i;
+var alphaNumericRegex = /^[0-9a-z.,\s\-]+$/i;
 var emailRegEx = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 var phoneRegEx = /^(\+?1-?)?(\([2-9]([02-9]\d|1[02-9])\)|[2-9]([02-9]\d|1[02-9]))-?[2-9]([02-9]\d|1[02-9])-?\d{4}$/

@@ -17,16 +17,18 @@ namespace TMS.API.Service.DependencyResolution
           expression.For<IDomainService<User>>().HybridHttpOrThreadLocalScoped().Use<UserDomainService>();
           expression.For<IDomainService<Country>>().HybridHttpOrThreadLocalScoped().Use<CountryDomainService>();
           expression.For<IDomainService<Instructor>>().HybridHttpOrThreadLocalScoped().Use<InstructorDomainService>();
-          expression.For<IDomainService<ActivityEntity>>().HybridHttpOrThreadLocalScoped().Use<ActivityDomainService>();
+          expression.For<IDomainService<Activity>>().HybridHttpOrThreadLocalScoped().Use<ActivityDomainService>();
           expression.For<IDomainService<InternalUser>>().HybridHttpOrThreadLocalScoped().Use<InternalUserDomainService>();
+          expression.For<IDomainService<Contact>>().HybridHttpOrThreadLocalScoped().Use<ContactDomainService>();
 
           expression.For<IDataProvider<Course>>().HybridHttpOrThreadLocalScoped().Use<CourseDataProvider>();
           expression.For<IDataProvider<Lead>>().HybridHttpOrThreadLocalScoped().Use<LeadDataProvider>();
           expression.For<IDataProvider<User>>().HybridHttpOrThreadLocalScoped().Use<UserDataProvider>();
           expression.For<IDataProvider<Country>>().HybridHttpOrThreadLocalScoped().Use<CountryDataProvider>();
           expression.For<IDataProvider<Instructor>>().HybridHttpOrThreadLocalScoped().Use<InstructorDataProvider>();
-          expression.For<IDataProvider<ActivityEntity>>().HybridHttpOrThreadLocalScoped().Use<ActivityDataProvider>();
+          expression.For<IDataProvider<Activity>>().HybridHttpOrThreadLocalScoped().Use<ActivityDataProvider>();
           expression.For<IDataProvider<InternalUser>>().HybridHttpOrThreadLocalScoped().Use<InternalUserDataProvider>();
+          expression.For<IDataProvider<Contact>>().HybridHttpOrThreadLocalScoped().Use<ContactDataProvider>();
 
           expression.Scan(scanner =>
           {

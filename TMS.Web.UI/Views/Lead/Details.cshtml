@@ -78,70 +78,7 @@
 </ul>
 <div class="row">
   <div class="col-md-6">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-info list-group-item-text"><i class="fa fa-phone fa-fw fa-lg"></i>@Html.LabelForPascal(lead => lead.CommunicationDetails):<i class="fa fa-chevron-down pull-right"></i></li>
-      @if (Model.CommunicationDetails != null && Model.CommunicationDetails.Any())
-      {
-        <li class="list-group-item">
-          <table class="table">
-            <thead>
-              <tr>
-                <td class="text-right"><strong>Is Preferred?</strong>
-                <td><strong>Comm. Type</strong></td>
-                <td><strong>ID</strong></td>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach (CommunicationDetail communicationDetail in Model.CommunicationDetails)
-              {
-                <tr>
-                  <td class="text-right col-md-3">
-                    @if (communicationDetail.IsPreferred)
-                    {
-                      <i class="fa fa-check-square fa-lg"></i>
-                    }
-                  </td>
-                  <td class="col-md-3">
-                    @switch (communicationDetail.CommunicationType)
-                    {
-                      case CommunicationType.Email:
-                        <i id="brandicon" class="fa fa-envelope fa-lg"></i>
-                        break;
-                      case CommunicationType.Phone:
-                      <i id="brandicon" class="fa fa-phone-square fa-lg"></i>
-                        break;
-                      case CommunicationType.Mobile:
-                      <i id="brandicon" class="fa fa-mobile fa-lg"></i>
-                        break;
-                      case CommunicationType.Skype:
-                      <i id="brandicon" class="fa fa-skype fa-lg"></i>
-                        break;
-                      case CommunicationType.Twitter:
-                      <i id="brandicon" class="fa fa-twitter-square fa-lg"></i>
-                        break;
-                      case CommunicationType.Facebook:
-                      <i id="brandicon" class="fa fa-facebook-square fa-lg"></i>
-                        break;
-                      case CommunicationType.LinkedIn:
-                      <i id="brandicon" class="fa fa-linkedin-square fa-lg"></i>
-                        break;
-                      case CommunicationType.Fax:
-                      <i id="brandicon" class="fa fa-print fa-lg"></i>
-                        break;
-                      default:
-                      <i id="brandicon" class="fa fa-question fa-lg"></i>
-                        break;
-                    }
-                  </td>
-                  <td class="col-md-6">@communicationDetail.Uri</td>
-                </tr>
-              }
-              <tr><td colspan="3"></td></tr>
-            </tbody>
-          </table>
-        </li>
-      }
-    </ul>
+    @Html.Partial("_CommunicationDetail", Model)
   </div>
   <div class="col-md-6">
     <ul class="list-group">

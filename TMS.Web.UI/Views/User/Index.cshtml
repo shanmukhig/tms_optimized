@@ -27,7 +27,7 @@
       {
         var detail = details.Single(x => x.Id == user.Id);
         <tr>
-          <td><input type="checkbox" data="@user.Id" /></td>
+          <td><i class="fa fa-square-o fa-lg" data-value="@user.Id"></i></td>
           <td style="cursor: pointer;" onclick="location.href = '@Url.Action("Details", "User" , new {id=user.Id})'">@detail.Name</td>
           <td>
             @user.UserName

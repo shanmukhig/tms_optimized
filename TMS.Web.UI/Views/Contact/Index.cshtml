@@ -1,4 +1,6 @@
-﻿@model TMS.Entities.Contact
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Contact
 
 @{
   ViewBag.Title = "Contacts";
@@ -8,42 +10,42 @@
 <thead>
   <tr>
     <th></th>
+    <th>Name</th>
     <th>Title</th>
-    <th>Lead Type</th>
-    <th>Lead Source</th>
+    <th>Company Name</th>
     <th>City</th>
     <th>Country</th>
-    <th>Client Status</th>
+    <th>Description</th>
     <th>Status</th>
   </tr>
 </thead>
 <tbody>
   @{
+    List<Contact> contacts = (List<Contact>) ViewData["Contacts"];
     List<Country> countries = ViewBag.Countries;
-    if (ViewBag.Leads == null)
+    if (contacts != null)
     {
-      return;
-    }
-    foreach (Lead lead in ViewBag.Leads)
-    {
-      <tr>
-        <td style="text-align: center"><input type="checkbox" data="@lead.Id" /></td>
-        <td class="td" onclick="location.href='@Url.Action("Details", "Lead", new {id = lead.Id})'">@lead.Salutation. @lead.LastName, @lead.FirstName</td>
-        <td>
-          @Html.PascalCaseToPrettyString(@lead.LeadType)
-        </td>
-        <td>
-          @Html.PascalCaseToPrettyString(@lead.LeadSource)
-        </td>
-        <td>@lead.City</td>
-        <td>
-          @countries.Single(x => x.Id == lead.Country).Name.TitleCase()
-        </td>
-        <td>
-          @Html.PascalCaseToPrettyString(lead.ClientStatus)
-        </td>
-        <td>@lead.Status</td>
-      </tr>
+      foreach (Contact contact in contacts)
+      {
+        <tr>
+          <td style="text-align: center"><i class="fa fa-square-o fa-lg" data-value="@contact.Id"></i></td>
+          <td class="td" onclick="location.href='@Url.Action("Details", "Contact", new {id = contact.Id})'">@contact.Salutation. @contact.LastName, @contact.FirstName</td>
+          <td>
+            @contact.Title
+          </td>
+          <td>
+            @contact.CompanyName
+          </td>
+          <td>@contact.City</td>
+          <td>
+            @countries.Single(x => x.Id == contact.Country).Name.TitleCase()
+          </td>
+          <td>
+            @contact.Description.Shorten(20)
+          </td>
+          <td>@contact.Status</td>
+        </tr>
+      }
     }
   }
 </tbody>

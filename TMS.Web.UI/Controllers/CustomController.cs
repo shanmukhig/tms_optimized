@@ -38,6 +38,8 @@ namespace TMS.Web.UI.Controllers
     public abstract ActionResult Details(string id);
     public abstract ActionResult Create();
     public abstract ActionResult Edit(string id);
+    public abstract ActionResult Create(T entity);
+    public abstract ActionResult Edit(T entity);
 
     public virtual ActionResult Index()
     {

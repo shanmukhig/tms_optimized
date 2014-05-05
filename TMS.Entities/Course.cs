@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TMS.Entities
 {
-  public class ActivityEntity : BaseEntity
+  public class Activity : BaseEntity
   {
     public string AssignedTo { get; set; }
     //public DateTime? StartFrom { get; set; }
@@ -13,6 +13,7 @@ namespace TMS.Entities
     public string Notes { get; set; }
     public ActivityStatus ActivityStatus { get; set; }
     public ActivityType ActivityType { get; set; }
+    //public string Description { get; set; }
   }
 
   public enum ActivityStatus
@@ -30,6 +31,10 @@ namespace TMS.Entities
     public string Title { get; set; }
     public string Address { get; set; }
     public string Zip { get; set; }
+    public string City { get; set; }
+    public string Country { get; set; }
+    public string State { get; set; }
+    public string Description { get; set; }
   }
 
   //public enum ActivityRecurrence
@@ -48,10 +53,10 @@ namespace TMS.Entities
 
   public enum ActivityPriority
   {
-    High,
-    Medium,
-    Normal,
-    Low
+    High = 1,
+    Medium = 2,
+    Normal = 3,
+    Low = 4
   }
 
   public enum ActivityType

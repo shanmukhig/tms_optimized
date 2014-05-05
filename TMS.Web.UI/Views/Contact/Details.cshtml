@@ -1,6 +1,73 @@
-﻿@model TMS.Entities.Contact
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model TMS.Entities.Contact
 
 @{
   ViewBag.Title = "Contact Details";
   Layout = "~/Views/Shared/_Details.cshtml";
 }
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-text list-group-item-info">
+    <i class="fa fa-tags fa-fw fa-lg"></i>
+    <strong>Personal Details</strong><i class="fa fa-chevron-down pull-right"></i>
+  </li>
+  <li class="list-group-item">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td class="text-right col-md-2" style="border-top: none;"><strong>Name:</strong></td>
+          <td class="col-md-4" style="border-top: none;">@Model.Salutation. @Model.LastName @Model.FirstName</td>
+          <td class="text-right col-md-2" style="border-top: none;"><strong>Company Name:</strong></td>
+          <td class="col-md-4" style="border-top: none;">@Model.CompanyName</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Title:</strong></td>
+          <td>@Model.Title</td>
+          <td class="text-right"><strong>Address:</strong></td>
+          <td>@Model.Address</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>City:</strong></td>
+          <td>@Model.City</td>
+          <td class="text-right"><strong>State:</strong></td>
+          <td>@Model.State</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Country:</strong></td>
+          <td>@ViewBag.Country.Name</td>
+          <td class="text-right"><strong>Zip:</strong></td>
+          <td>@Model.Zip</td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Referred By:</strong></td>
+          <td>
+            @{
+              if (ViewBag.Details != null)
+              {
+                List<dynamic> details = ViewBag.Details as List<dynamic>;
+                var detail = details.SingleOrDefault(x => x.Id == Model.ReferredBy);
+                if (detail != null)
+                {
+                  @detail.Name
+                }
+              }
+            }
+          </td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td class="col-md-2 text-right"><strong>Description:</strong></td>
+          <td class="col-md-4">@Model.Description</td>
+          <td class="col-md-2 text-right"><strong>Status:</strong></td>
+          <td class="col-md-2">@Model.Status</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+<div class="row">
+  <div class="col-md-12">
+    @Html.Partial("_CommunicationDetail", Model)
+  </div>
+</div>

@@ -37,11 +37,8 @@ namespace TMS.Web.UI.Controllers
       return View(new User());
     }
 
-    //
-    // POST: /User/Create
-
     [HttpPost]
-    public ActionResult CreateUser(User user)
+    public override ActionResult Create(User user)
     {
       try
       {
@@ -67,7 +64,7 @@ namespace TMS.Web.UI.Controllers
     // POST: /User/Edit/5
 
     [HttpPost]
-    public ActionResult EditUser(string id)
+    public override ActionResult Edit(User id)
     {
       try
       {

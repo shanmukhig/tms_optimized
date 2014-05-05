@@ -2,7 +2,7 @@
 
 namespace TMS.Data
 {
-  public class ActivityDataProvider : DataProvider<ActivityEntity>
+  public class ActivityDataProvider : DataProvider<Activity>
   {
   }
 }

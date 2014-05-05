@@ -11,7 +11,7 @@
   i = i & validateDD('#Country', 'Country required.', 'left');
   i = i & (validateTable('#communicationDetail', 'Communication detail required.', 'top', 3) && validatePreferred());
   i = i & validateDD('#Status', 'Instructor status required.', 'left');
-  i = i & validateInputO('#Description', 'Description should be a valid string.', '', 'top');
+  i = i & validateInputO('#Description', 'Description should be a valid string.', 'left', stringRegEx);
   i = i & validateTable('#courseDetail', 'Communication detail required.', 'top', 3);
   i = i & validateTable('#certifications', 'Communication detail required.', 'top', 3);
   i = i & validateRating();

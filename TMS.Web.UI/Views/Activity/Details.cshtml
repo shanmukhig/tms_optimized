@@ -1,6 +1,74 @@
-﻿@model TMS.Entities.ActivityEntity
+﻿@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model TMS.Entities.Activity
 
 @{
   ViewBag.Title = "Activity Details";
   Layout = "~/Views/Shared/_Details.cshtml";
 }
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-text list-group-item-info">
+    <i class="fa fa-bell fa-fw fa-lg"></i>
+    <strong>Activity Details</strong><i class="fa fa-chevron-down pull-right"></i>
+  </li>
+  <li class="list-group-item">
+    <table class="table">
+      <tr>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;">@Html.HiddenFor(activity => activity.Id)@Html.LabelForPascal(activity => activity.AssignedTo):</td>
+        <td class="col-md-4" style="border-top: none;">
+          @{
+            var detail = ViewBag.Details;
+            //var detail = details.SingleOrDefault(x => x.Id == Model.AssignedTo);
+            if (detail != null)
+            {
+              @detail.Name
+            }
+          }
+        </td>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;">@Html.LabelForPascal(lead => lead.DueBy):</td>
+        <td class="col-md-4" style="border-top: none;">
+          @if (Model.DueBy.HasValue && Model.DueBy.Value.Subtract(DateTime.Today).TotalDays <= 0)
+          {
+            <i class="fa fa-exclamation fa-lg fa-fw text-danger"></i><i class="fa fa-clock-o fa-lg text-danger"></i>
+          }
+          else
+          {
+            <i class="fa fa-clock-o fa-lg fa-fw"></i>
+          }
+          @Model.DueBy.FormatDateTime(false)
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.Priority):</td>
+        <td class="col-md-4">
+          @{
+            if (Model.Priority == ActivityPriority.High)
+            {
+              <i class="fa fa-exclamation text-danger"></i>
+            }
+            else if (Model.Priority == ActivityPriority.Low)
+            {
+              <i class="fa fa-arrow-down text-primary"></i>
+            }
+            else if (Model.Priority == ActivityPriority.Medium)
+            {
+              <i class="fa fa-arrow-up text-warning"></i>
+            }
+          }
+          @Html.PascalCaseToPrettyString(Model.Priority)
+        </td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.ActivityStatus):</td>
+        <td class="col-md-4">@Html.PascalCaseToPrettyString(Model.ActivityStatus)</td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.ActivityType):</td>
+        <td class="col-md-4">@Html.PascalCaseToPrettyString(Model.ActivityType)</td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.Status):</td>
+        <td class="col-md-4">@Html.PascalCaseToPrettyString(Model.Status)</td>
+      </tr>
+<tr><td class="col-md-2 text-right top-right">@Html.LabelForPascal(lead => lead.Notes):</td>
+<td class="col-md-10" colspan="3">@Model.Notes</td></tr>
+    </table>
+  </li>
+</ul>

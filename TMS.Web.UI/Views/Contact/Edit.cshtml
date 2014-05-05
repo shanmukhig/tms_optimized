@@ -2,5 +2,8 @@
 
 @{
   ViewBag.Title = "Edit Contact";
-  Layout = "~/Views/Shared/_CreateEditPartial.cshtml";
+  Layout = string.Empty;
+}
+@{
+  Html.RenderPartial("ContactPartial");
 }

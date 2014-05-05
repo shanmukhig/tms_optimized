@@ -78,7 +78,11 @@ namespace TMS.Web.UI.Tests
         Title = "Title",
         Zip = "98001",
         CompanyName = "Microsoft Corporation",
-        FirstName = "Shanmukhi Goli",
+        FirstName = "Shanmukhi",
+        City = "Bothell",
+        Country = "USA",
+        Description = "Description about contact",
+        State = "WA"
       };
       var serializeObject = JsonConvert.SerializeObject(contact);
     }
@@ -110,7 +114,7 @@ namespace TMS.Web.UI.Tests
         FirstName = "Shanmukhi",
         LastName = "Goli",
         Salutation = Salutation.Mr,
-        Status = Status.Active
+        Status = Status.Active,
       };
 
       serializeObject = JsonConvert.SerializeObject(internalUser);
@@ -129,7 +133,7 @@ namespace TMS.Web.UI.Tests
     [TestMethod]
     public void SerializeActivity()
     {
-      ActivityEntity activity = new ActivityEntity
+      Activity activity = new Activity
       {
         ActivityStatus = ActivityStatus.Created,
         ActivityType = ActivityType.Phone,

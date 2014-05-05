@@ -39,11 +39,8 @@ namespace TMS.Web.UI.Controllers
       return View(new Course());
     }
 
-    //
-    // POST: /Course/Create
-
     [HttpPost]
-    public ActionResult CreateCourse(Course course)
+    public override ActionResult Create(Course course)
     {
       try
       {
@@ -64,11 +61,8 @@ namespace TMS.Web.UI.Controllers
       return View("Edit", _courseWebService.Get(id));
     }
 
-    //
-    // POST: /Course/Edit/5
-
     [HttpPost]
-    public ActionResult EditCourse(Course course)
+    public override ActionResult Edit(Course course)
     {
       try
       {

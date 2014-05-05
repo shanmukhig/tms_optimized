@@ -3,9 +3,9 @@ using TMS.Entities;
 
 namespace TMS.API.Service.Controllers
 {
-  public class ActivityAPIController : CustomController<ActivityEntity>
+  public class ActivityAPIController : CustomController<Activity>
   {
-    public ActivityAPIController(IDomainService<ActivityEntity> activityDomainService):base(activityDomainService)
+    public ActivityAPIController(IDomainService<Activity> activityDomainService):base(activityDomainService)
     {
     }
   }

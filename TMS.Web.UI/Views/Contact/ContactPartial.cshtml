@@ -1,0 +1,83 @@
+﻿@using System.Linq
+@using TMS.Entities
+@using TMS.Web.UI.Helpers
+@model Contact
+
+@{
+  Layout = "../Shared/_CreateEditPartial.cshtml";
+}
+
+<ul class="list-group">
+  <li class="list-group-item list-group-item-text list-group-item-info">
+    <i class="fa fa-tags fa-fw fa-lg"></i>
+    <strong>Personal Details</strong><i class="fa fa-chevron-down pull-right"></i>
+  </li>
+  <li class="list-group-item">
+    <table class="table">
+      <tr>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;">@Html.HiddenFor(contact => contact.Id)@Html.LabelForPascal(contact => contact.Salutation):</td>
+        <td class="col-md-4" style="border-top: none;">@Html.EnumDropDownListFor(contact => contact.Salutation)</td>
+        <td class="col-md-2 text-right vert-align" style="border-top: none;">@Html.LabelForPascal(contact => contact.FirstName):</td>
+        <td class="col-md-4" style="border-top: none;">@Html.TextBoxFor(contact => contact.FirstName, new { @class = "form-control" })</td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(contact => contact.LastName):</td>
+        <td class="col-md-4">@Html.TextBoxFor(contact => contact.LastName, new { @class = "form-control" })</td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(contact => contact.Title):</td>
+        <td class="col-md-4">@Html.TextBoxFor(lead => lead.Title, new { @class = "form-control" })</td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(contact => contact.CompanyName):</td>
+        <td class="col-md-4">@Html.TextBoxFor(contact => contact.CompanyName, new { @class = "form-control" })</td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.ReferredBy):</td>
+        <td class="col-md-4">
+          @{
+            List<dynamic> details = ViewBag.Details as List<dynamic>;
+            var selectListItem = from u in details
+                             select new SelectListItem
+                             {
+                               Selected = @Model.ReferredBy == u.Id,
+                               Text = u.Name,
+                               Value = u.Id
+                             };
+          }
+          @Html.DropDownListFor(contact => contact.ReferredBy, selectListItem, "Select One...", new { @class = "form-control" })
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(contact => contact.City):</td>
+        <td class="col-md-4">@Html.TextBoxFor(contact => contact.City, new { @class = "form-control" })</td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(contact => contact.State):</td>
+        <td class="col-md-4">@Html.TextBoxFor(contact => contact.State, new { @class = "form-control" })</td>
+      </tr>
+      <tr>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(contact => contact.Zip):</td>
+        <td class="col-md-4">@Html.TextBoxFor(contact => contact.Zip, new { @class = "form-control" })</td>
+        <td class="col-md-2 text-right vert-align">@Html.LabelForPascal(lead => lead.Country):</td>
+        <td class="col-md-4">
+          @{
+            List<Country> countries = ViewBag.Countries;
+            selectListItem = countries.Select(c => new SelectListItem
+            {
+              Selected = c.Id == Model.Country,
+              Text = c.Name,
+              Value = c.Id
+            });
+          }
+          @Html.DropDownListFor(contact => contact.Country, selectListItem, "Select One...", new { @class = "form-control" })
+        </td>
+      </tr>
+      <tr>
+        <td class="col-md-2 vert-align text-right">@Html.LabelFor(contact => contact.Description):</td>
+        <td class="col-md-4">@Html.TextBoxFor(contact => contact.Description, new { @class = "form-control" })</td>
+        <td class="col-md-2 vert-align text-right">@Html.LabelForPascal(contact => contact.Status):</td>
+        <td class="col-md-4">@Html.EnumDropDownListFor(contact => contact.Status)</td>
+      </tr>
+    </table>
+  </li>
+</ul>
+<div class="row">
+  <div class="col-md-12">
+    @Html.Partial("_CommunicationDetail_Edit", Model)
+  </div>
+</div>

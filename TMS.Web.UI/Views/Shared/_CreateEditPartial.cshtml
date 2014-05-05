@@ -3,7 +3,7 @@
 }
 
 @{
-  string method = string.Format("{0}{1}", string.IsNullOrWhiteSpace(Model.Id) ? "Create" : "Edit", @ViewBag.ControllerName);
+  string method = string.IsNullOrWhiteSpace(Model.Id) ? "Create" : "Edit";
   string form = string.Format("{0}Form", @ViewBag.ControllerName.ToLower());
 }
 

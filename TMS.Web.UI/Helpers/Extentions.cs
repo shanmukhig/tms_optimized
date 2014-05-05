@@ -10,24 +10,13 @@ using System.Web.Mvc.Html;
 
 namespace TMS.Web.UI.Helpers
 {
-  //public class StringEqualityComparer : IEqualityComparer<string>
-  //{
-  //  public bool Equals(string source, string target)
-  //  {
-  //    return string.Equals(source, target, StringComparison.InvariantCultureIgnoreCase);
-  //  }
-
-  //  public int GetHashCode(string obj)
-  //  {
-  //    return obj.GetHashCode();
-  //  }
-  //}
-
-  public static class EnumHelper
+  public static class Extentions
   {
     public static string Shorten(this string source, int maxLength)
     {
-      return source.Length > maxLength ? string.Format("{0}...", source.Substring(0, maxLength)) : source;
+      return string.IsNullOrWhiteSpace(source)
+        ? string.Empty
+        : (source.Length > maxLength ? string.Format("{0}...", source.Substring(0, maxLength)) : source);
     }
 
     public static bool Contains(this string source, string target, StringComparison stringComparison = StringComparison.InvariantCultureIgnoreCase)
@@ -44,11 +33,6 @@ namespace TMS.Web.UI.Helpers
       else
         return value.HasValue ? value.Value.ToString("dddd MMM, dd, yyyy") : string.Empty;
     }
-
-    //public static string FormatDateTime(this DateTime value)
-    //{
-    //  return FormatDateTime((DateTime?) value);
-    //}
 
     public static string PascalCaseToPrettyString<TEnum>(this HtmlHelper helper, TEnum s)
     {

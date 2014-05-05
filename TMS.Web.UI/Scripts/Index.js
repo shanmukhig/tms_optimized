@@ -1,6 +1,6 @@
 ﻿Messenger.options = {
     extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
-    theme: 'air'
+    theme: 'flat'
   }
 
 $('span i.fa-search').click(function () {
@@ -20,10 +20,11 @@ $('span i.fa-search').click(function () {
 $(document).ready(function() {
   $('span i.fa-trash-o, i.fa-wheelchair, i.fa-check-square-o').click(function() {
     var d = $(this).hasClass('fa-trash-o') ? 'd' : $(this).hasClass('fa-wheelchair') ? 'i' : 'e';
-    if ($('input:checkbox:checked').length > 0) {
-      $('input:checkbox:checked').each(function() {
+    var ci = $('i.fa-check-square');
+    if (ci.length > 0) {
+      ci.each(function() {
         if (showMessage($(this), d)) {
-          deleteEntity($(this).attr('data'), d, $(this));
+          deleteEntity($(this).attr('data-value'), d, $(this));
         }
       });
     } else {
